@@ -2,6 +2,7 @@
 #define GAME_H
 #pragma once
 
+#include "GameObject.h"
 #include "Input.h"
 #include "Window.h"
 #include "GameObject.h"

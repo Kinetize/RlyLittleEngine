@@ -5,13 +5,14 @@
 #include <GL/glew.h>
 #include "Vector2f.h"
 #include "GameObject.h"
+#include "Texture.h"
 
 class Sprite : GameObject {
 public:
 	Sprite(Vector2f pos, Vector2f dimensions);
 
 private:
-	GLuint	 _vboID;
+	Texture _texture;
 
 	Vector2f _pos;
 	Vector2f _dimensions;

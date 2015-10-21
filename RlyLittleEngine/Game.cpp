@@ -1,5 +1,5 @@
-#include<iostream>
 #include "Game.h"
+#include<iostream>
 #include<Windows.h>
 
 Game::Game(const std::string title, int width, int height, int fps) :
@@ -20,7 +20,7 @@ Game::~Game() {
 
 void Game::start() {
 	Window window(_screenWidth, _screenHeight, "Little");
-	GameObject root();
+	GameObject root(1);
 
 	if (Init(&window, &root))
 		_run = true;
