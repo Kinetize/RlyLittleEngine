@@ -2,10 +2,11 @@
 #define GAME_H
 #pragma once
 
-#include "GameObject.h"
 #include "Input.h"
 #include "Window.h"
-#include "GameObject.h"
+#include "Sprite.h"
+#include<iostream>
+#include<Windows.h>
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 #include <string>

@@ -1,6 +1,4 @@
 #include "Game.h"
-#include<iostream>
-#include<Windows.h>
 
 Game::Game(const std::string title, int width, int height, int fps) :
 	_window(nullptr),
@@ -21,6 +19,8 @@ Game::~Game() {
 void Game::start() {
 	Window window(_screenWidth, _screenHeight, "Little");
 	GameObject root(1);
+	Sprite sprite(Vector2f(-1, -1), Vector2f(1, 1));
+	root.AddChildren(&sprite);
 
 	if (Init(&window, &root))
 		_run = true;

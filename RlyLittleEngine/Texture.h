@@ -11,8 +11,11 @@ class Texture : GameComponent {
 public:
 	Texture(std::string fileDir);
 
+	virtual void Update() override;
+	virtual void Render() const override;
+
 private:
-	GLuint	 _vboID;
+	
 
 	bool loadTexture(std::string fileDir);
 };
