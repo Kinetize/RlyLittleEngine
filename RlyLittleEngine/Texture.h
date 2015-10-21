@@ -9,7 +9,7 @@
 
 class Texture : GameComponent {
 public:
-	Texture(std::string fileDir);
+	Texture(const std::string& fileDir);
 
 	virtual void Update() override;
 	virtual void Render() const override;
@@ -17,7 +17,7 @@ public:
 private:
 	
 
-	bool loadTexture(std::string fileDir);
+	bool loadTexture(const std::string& fileDir);
 };
 
 #endif

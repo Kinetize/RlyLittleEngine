@@ -17,12 +17,17 @@ Game::~Game() {
 }
 
 void Game::start() {
-	Window window(_screenWidth, _screenHeight, "Little");
-	GameObject root(1);
+	Window window(_screenWidth, _screenHeight, "Little"); //Class variable?
+	GameObject root(1); //Class variable?
+
+	/*relativ paths...*/Shader shader;
+	shader.Compile("C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/res/shaders/baseShader");
+	shader.AddAttribute("pos");
+	shader.Link();
 	Sprite sprite(Vector2f(-1, -1), Vector2f(1, 1));
 	root.AddChildren(&sprite);
 
-	if (Init(&window, &root))
+	if (Init(&window, &root, &shader))
 		_run = true;
 	else
 		std::cerr << "Failed to Init" << std::endl;
@@ -30,9 +35,10 @@ void Game::start() {
 	Run();
 }
 
-bool Game::Init(Window* window, GameObject* root) {
+bool Game::Init(Window* window, GameObject* root, Shader* shader) { //kinda senceless
 	_window = window;
 	_root = root;
+	_shader = shader;
 
 	return true;
 }
@@ -97,5 +103,7 @@ void Game::Render() {
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	_shader->Bind();
 	_root->RenderAll();
+	_shader->Unbind();
 }

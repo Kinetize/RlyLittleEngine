@@ -1,4 +1,5 @@
 #include "Sprite.h"
+#include <iostream>
 
 Sprite::Sprite(Vector2f pos, Vector2f dimensions) :
 	GameObject(1),

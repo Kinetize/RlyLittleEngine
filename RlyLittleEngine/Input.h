@@ -2,7 +2,6 @@
 #define INPUT_H
 #pragma once
 
-//#include "Window.h"
 #include "Vector2f.h"
 
 class Window;

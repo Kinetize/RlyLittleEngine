@@ -3,7 +3,6 @@
 #pragma once
 
 #include <GL/glew.h>
-//#include <iostream>
 #include "Vector2f.h"
 #include "GameObject.h"
 #include "Texture.h"

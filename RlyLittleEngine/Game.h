@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Window.h"
 #include "Sprite.h"
+#include "Shader.h"
 #include<iostream>
 #include<Windows.h>
 #include <SDL/SDL.h>
@@ -24,6 +25,7 @@ public:
 private:
 	Window*			_window;
 	GameObject*		_root;
+	Shader*			_shader;
 
 	std::string		_title;
 
@@ -34,7 +36,7 @@ private:
 
 	float			_timePerFrame;
 
-	bool Init(Window* window, GameObject* root);
+	bool Init(Window* window, GameObject* root, Shader* shader);
 	void Run();
 	void Stop();
 
