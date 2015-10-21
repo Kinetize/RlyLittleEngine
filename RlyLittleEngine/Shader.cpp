@@ -1,5 +1,4 @@
 #include "Shader.h"
-#include <iostream> //temp
 
 Shader::Shader() :
 	_programID(0),
@@ -28,8 +27,6 @@ void Shader::Compile(const std::string& shaderDir) {//.../res/shaders mit rein n
 
 	CompileShader(shaderDir + ".vs", _vertexSID);
 	CompileShader(shaderDir + ".fs", _fragmentSID);
-
-	std::cout << "compiled" << std::endl;
 }
 
 void Shader::AddAttribute(const std::string& attribName) {
@@ -37,8 +34,6 @@ void Shader::AddAttribute(const std::string& attribName) {
 		return;
 	
 	glBindAttribLocation(_programID, _attribCount++, attribName.c_str());
-
-	std::cout << "attribute added" << std::endl;
 }
 
 void Shader::Link() {
@@ -61,8 +56,6 @@ void Shader::Link() {
 	glDetachShader(_programID, _fragmentSID);
 	glDeleteShader(_vertexSID);
 	glDeleteShader(_fragmentSID);
-
-	std::cout << "linked" << std::endl;
 }
 
 void Shader::Bind() const {
