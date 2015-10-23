@@ -29,13 +29,6 @@ void Shader::Compile(const std::string& shaderDir) {//.../res/shaders mit rein n
 	CompileShader(shaderDir + ".fs", _fragmentSID);
 }
 
-void Shader::AddAttribute(const std::string& attribName) {
-	if (!_programID)
-		return;
-	
-	glBindAttribLocation(_programID, _attribCount++, attribName.c_str());
-}
-
 void Shader::Link() {
 	glAttachShader(_programID, _vertexSID);
 	glAttachShader(_programID, _fragmentSID);
@@ -56,6 +49,17 @@ void Shader::Link() {
 	glDetachShader(_programID, _fragmentSID);
 	glDeleteShader(_vertexSID);
 	glDeleteShader(_fragmentSID);
+}
+
+void Shader::AddAttribute(const std::string& attribName) {
+	if (!_programID)
+		return;
+
+	glBindAttribLocation(_programID, _attribCount++, attribName.c_str());
+}
+
+GLuint Shader::GetUniformLocation(const std::string& uName) {
+
 }
 
 void Shader::Bind() const {

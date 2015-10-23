@@ -11,6 +11,10 @@ public:
 
 	inline float GetX() const { return _x; }
 	inline float GetY() const { return _y; }
+
+	inline void SetX(float x) { _x = x; }
+	inline void SetY(float y) { _y = y; }
+
 	inline std::string ToString() const { return "X: " + std::to_string(_x) + "Y: " + std::to_string(_y); }
 
 private:

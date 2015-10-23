@@ -23,6 +23,7 @@ void Game::start() {
 	/*relativ paths...*/Shader shader;
 	shader.Compile("C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/res/shaders/baseShader");
 	shader.AddAttribute("pos");
+	shader.AddAttribute("color");
 	shader.Link();
 	Sprite sprite(Vector2f(-1, -1), Vector2f(1, 1));
 	root.AddChildren(&sprite);

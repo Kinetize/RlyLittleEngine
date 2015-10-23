@@ -12,10 +12,12 @@ public:
 	Shader();
 	~Shader();
 
-	void Compile(const std::string& shaderDir);
-	void AddAttribute(const std::string& attribName);
+	void Compile(const std::string& shaderDir);	
 	void Link();
-	
+
+	void AddAttribute(const std::string& attribName);
+	GLuint GetUniformLocation(const std::string& uName);
+
 	void Bind() const;
 	void Unbind() const;
 private:
