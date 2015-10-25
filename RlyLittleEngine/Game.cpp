@@ -7,7 +7,8 @@ Game::Game(const std::string title, int width, int height, int fps) :
 	_run(false),
 	_screenWidth(width),
 	_screenHeight(height),
-	_timePerFrame(1.0 / fps)
+	_timePerFrame(1.0 / (fps - 1)), //weird
+	_temp(0)
 {
 }
 
@@ -105,6 +106,10 @@ void Game::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_shader->Bind();
+
+	_temp += 0.02f;
+	_shader->SetUniformF("time", _temp);
 	_root->RenderAll();
+
 	_shader->Unbind();
 }

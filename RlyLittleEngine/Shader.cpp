@@ -58,8 +58,8 @@ void Shader::AddAttribute(const std::string& attribName) {
 	glBindAttribLocation(_programID, _attribCount++, attribName.c_str());
 }
 
-GLuint Shader::GetUniformLocation(const std::string& uName) {
-
+void Shader::SetUniformF(const std::string& uName, float value) {
+	glUniform1f(GetUniformLocation(uName), value);
 }
 
 void Shader::Bind() const {
@@ -90,4 +90,12 @@ void Shader::CompileShader(const std::string shaderDir, GLuint id) {
 		glDeleteShader(id);
 		return;
 	}
+}
+
+GLuint Shader::GetUniformLocation(const std::string& uName) {
+	if (!_programID)
+		return -1;
+
+	return glGetUniformLocation(_programID, uName.c_str());
+	//Error Handling...(GL_INVALID_INDEX
 }

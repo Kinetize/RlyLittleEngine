@@ -16,7 +16,7 @@ public:
 	void Link();
 
 	void AddAttribute(const std::string& attribName);
-	GLuint GetUniformLocation(const std::string& uName);
+	void SetUniformF(const std::string& uName, float value);
 
 	void Bind() const;
 	void Unbind() const;
@@ -28,6 +28,7 @@ private:
 	int _attribCount;
 
 	void CompileShader(const std::string shaderDir, GLuint id);
+	GLuint GetUniformLocation(const std::string& uName);
 };
 
 #endif

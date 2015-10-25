@@ -35,6 +35,7 @@ private:
 	int				_screenHeight;
 
 	float			_timePerFrame;
+	float			_temp;
 
 	bool Init(Window* window, GameObject* root, Shader* shader);
 	void Run();

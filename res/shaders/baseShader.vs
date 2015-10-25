@@ -8,7 +8,7 @@ out vec4 fragColor;
 uniform float time;
 
 void main() { 
-	gl_Position	= vec4(pos, 0, 1);
+	gl_Position	= vec4(pos * sin(time), 0, 1);
 
 	fragColor = color;	
 }
