@@ -4,7 +4,7 @@
 
 #include <string>
 
-enum ErrorType {
+enum InformationType {
 
 };
 
@@ -14,7 +14,7 @@ public:
 	ErrorManager();
 	~ErrorManager();
 
-	void writeToLog(ErrorType type, std::string& text) const;
+	void writeToLog(InformationType type, std::string& text) const;
 };
 
 

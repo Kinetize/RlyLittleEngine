@@ -2,7 +2,7 @@
 
 //REMEMBER: Maus oben links 0,0; OpenGl Mitte 0,0
 //...Erstmal alles zum Funktionieren bringen dann mit GameObjects, Tranform-Klassen, DLL etc. umformen
-//Ressource Manager...
+//Ressource Manager...(Kein Mehrfaches laden, richtiges löschen etc)
 //ERROR HANDLING!!!!
 //Kommentare...
 
