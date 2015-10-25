@@ -92,7 +92,7 @@ void Shader::CompileShader(const std::string shaderDir, GLuint id) {
 	}
 }
 
-GLuint Shader::GetUniformLocation(const std::string& uName) {
+GLint Shader::GetUniformLocation(const std::string& uName) {
 	if (!_programID)
 		return -1;
 

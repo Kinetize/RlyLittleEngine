@@ -8,8 +8,7 @@ enum InformationType {
 
 };
 
-class ErrorManager
-{
+class ErrorManager {
 public:
 	ErrorManager();
 	~ErrorManager();
