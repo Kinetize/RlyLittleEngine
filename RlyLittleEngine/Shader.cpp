@@ -77,7 +77,7 @@ void Shader::Unbind() const {
 }
 
 void Shader::CompileShader(const std::string shaderDir, GLuint id) {
-	std::string content = readFile(shaderDir);
+	std::string content = ResourceManager.readFile(shaderDir);
 	const char* contentPtr = content.c_str(); //Dirty...
 	glShaderSource(id, 1, &contentPtr, nullptr);
 
