@@ -49,8 +49,7 @@ Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
 	std::pair<std::string, Texture> element = Util::PosStringInMap(_textures, fileDir);
 	if (element.first.compare("NotFound")) {
 		std::cout << "Bereits geladen" << std::endl;
-		Texture* tex = &element.second;
-		return tex;
+		return &element.second;
 	}
 	
 	_textures.insert(std::pair<std::string, Texture>(fileDir, Texture()));
