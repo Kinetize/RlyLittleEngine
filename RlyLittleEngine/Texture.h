@@ -7,7 +7,7 @@
 
 class Texture {
 public:
-	Texture();
+	Texture(int id);
 
 private:
 	GLuint _id; 

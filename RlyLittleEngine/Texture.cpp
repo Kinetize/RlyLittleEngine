@@ -1,9 +1,7 @@
 #include "Texture.h"
 
-
-
-Texture::Texture() :
-	_id(0)
+Texture::Texture(int id) :
+	_id(id)
 { 
 
 }

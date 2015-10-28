@@ -52,17 +52,17 @@ Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
 		return &element.second;
 	}
 	
-	_textures.insert(std::pair<std::string, Texture>(fileDir, Texture()));
+	std::string dir = "/res/textures/" + fileDir + ".png";
+	/*GLuint id = SOIL_load_OGL_texture(dir.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
+			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);*/int id = 0;
 
-	/*GLuint tex_2d = SOIL_load_OGL_texture("/res/textures/" + fileDir, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
-
-	if (!tex_2d)
+	if (!id)
 	{
 		//Error...
-	}*/
+	}
 
+	std::pair<std::string, Texture> textureElement = std::pair<std::string, Texture>(fileDir, Texture(id));
+	_textures.insert(textureElement);
 
-	Texture* texd = &Texture();
-	return texd;
+	return &textureElement.second;
 }

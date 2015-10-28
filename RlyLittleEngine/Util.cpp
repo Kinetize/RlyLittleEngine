@@ -12,5 +12,5 @@ std::pair<std::string, Texture> Util::PosStringInMap(std::map<std::string, Textu
 
 	}
 
-	return std::pair<std::string, Texture>("NotFound", Texture()); //net so geil...
+	return std::pair<std::string, Texture>("NotFound", Texture(-1)); //net so geil...
 }
