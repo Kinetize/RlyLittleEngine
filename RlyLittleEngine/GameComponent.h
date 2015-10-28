@@ -2,12 +2,14 @@
 #define GAME_COMPONENT_H
 #pragma once
 
+#include "GameObject.h"
+
 class GameComponent {
 public:
 	GameComponent();
 
-	virtual void Update();
-	virtual void Render() const;
+	virtual void Update(float delta);
+	virtual void Render(const Shader* shader, const Mesh* mesh, const Area area) const;
 
 private:
 

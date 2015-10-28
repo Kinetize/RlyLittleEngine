@@ -34,6 +34,11 @@ void Game::start() {
 	else
 		std::cerr << "Failed to Init" << std::endl;
 
+	//Test
+	std::string test = "h";
+	ResourceManager::LoadPNGTexture(test);
+	ResourceManager::LoadPNGTexture(test);
+
 	Run();
 }
 
@@ -41,6 +46,8 @@ bool Game::Init(Window* window, GameObject* root, Shader* shader) { //kinda senc
 	_window = window;
 	_root = root;
 	_shader = shader;
+
+	ResourceManager::Init();
 
 	return true;
 }
@@ -73,7 +80,7 @@ void Game::Run() {
 		
 		while (unprocessedTime > _timePerFrame) {
 			_window->UpdateInputs();
-			_root->UpdateAll();
+			_root->UpdateAll(_timePerFrame);
 
 			if (_window->GetCloseRequested())
 				Stop();
@@ -109,7 +116,8 @@ void Game::Render() {
 
 	_temp += 0.02f;
 	_shader->SetUniformF("time", _temp);
-	_root->RenderAll();
+	Mesh* mesh = &Mesh();
+	_root->RenderAll(_shader, mesh, Area());
 
 	_shader->Unbind();
 }

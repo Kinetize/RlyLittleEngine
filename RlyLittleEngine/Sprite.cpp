@@ -3,7 +3,7 @@
 Sprite::Sprite(Vector2f pos, Vector2f dimensions) :
 	GameObject(1),
 	_vboID(0),
-	_texture(Texture("afdf")),
+	_texture(nullptr), //deftextur
 	_pos(pos),
 	_dimensions(dimensions)
 {
@@ -50,11 +50,11 @@ void Sprite::Init() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Sprite::Update() {
+void Sprite::Update(float delta) {
 
 }
 
-void Sprite::Render() const {//Mesh Klasse...
+void Sprite::Render(const Shader* shader, const Mesh* mesh, const Area area) const {//Mesh Klasse...
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glEnableVertexAttribArray(0);
 

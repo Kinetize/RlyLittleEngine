@@ -17,14 +17,14 @@ public:
 
 private:
 	GLuint	 _vboID;
-	Texture _texture;
+	Texture* _texture;
 	
 	Vector2f _pos;
 	Vector2f _dimensions;
 
 	void Init();
-	void Update() override;
-	void Render() const override;
+	void Update(float delta) override;
+	void Render(const Shader* shader, const Mesh* mesh, const Area area) const override;
 };
 
 #endif

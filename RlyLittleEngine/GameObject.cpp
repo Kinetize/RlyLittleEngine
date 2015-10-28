@@ -7,27 +7,27 @@ GameObject::GameObject(int temp) :
 
 }
 
-void GameObject::UpdateAll() {	
-	Update();
+void GameObject::UpdateAll(float delta) {
+	Update(delta);
 
 	for (auto & element : children) {
-		element->UpdateAll();
+		element->UpdateAll(delta);
 	}
 
 	for (auto & element : components) {
-		element->Update();
+		element->Update(delta);
 	}
 }
 
-void GameObject::RenderAll() const {
-	Render();
+void GameObject::RenderAll(const Shader* shader, const Mesh* mesh, const Area area) const {
+	Render(shader, mesh, area);
 
 	for (auto & element : children) {
-		element->RenderAll();
+		element->RenderAll(shader, mesh, area);
 	}
 
 	for (auto & element : components) {
-		element->Render();
+		element->Render(shader, mesh, area);
 	}
 }
 
@@ -47,10 +47,10 @@ void GameObject::AddComponent(GameComponent* component) {
 	components.push_back(component);
 }
 
-void GameObject::Update() {
+void GameObject::Update(float delta) {
 
 }
 
-void GameObject::Render() const {
+void GameObject::Render(const Shader* shader, const Mesh* mesh, const Area area) const {
 
 }

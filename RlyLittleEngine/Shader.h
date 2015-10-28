@@ -27,7 +27,7 @@ private:
 
 	int _attribCount;
 
-	void CompileShader(const std::string shaderDir, GLuint id);
+	void CompileShader(const std::string& shaderDir, GLuint id);
 	GLint GetUniformLocation(const std::string& uName);
 };
 

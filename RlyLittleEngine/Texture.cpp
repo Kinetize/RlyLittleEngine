@@ -2,20 +2,10 @@
 
 
 
-Texture::Texture(const std::string& fileDir) { //.../res/textures mit rein nehmen 
-	loadTexture(fileDir);
-}
-
-void Texture::Update() {
+Texture::Texture() :
+	_id(0)
+{ 
 
 }
 
-void Texture::Render() const {
-
-}
-
-bool Texture::loadTexture(const std::string& fileDir) {
-
-	return true;
-}
 
