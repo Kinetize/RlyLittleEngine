@@ -7,7 +7,7 @@
 
 class Util {
 public:
-	static int PosStringInMap(std::map<std::string, Texture> map, std::string text); //verallgemeinern?
+	static std::pair<std::string, Texture> PosStringInMap(std::map<std::string, Texture> map, std::string text); //verallgemeinern?
 
 };
 

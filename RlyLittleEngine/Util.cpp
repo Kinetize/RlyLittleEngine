@@ -1,6 +1,6 @@
 #include "Util.h"
 
-int Util::PosStringInMap(std::map<std::string, Texture> sMap, std::string text) { //verallgemeinern?
+std::pair<std::string, Texture> Util::PosStringInMap(std::map<std::string, Texture> sMap, std::string text) { //verallgemeinern?
 	
 	int index = -1;
 	
@@ -8,9 +8,9 @@ int Util::PosStringInMap(std::map<std::string, Texture> sMap, std::string text) 
 		index++;
 
 		if (element.first.compare(text) == 0) 
-			return index;
+			return element;
 
 	}
 
-	return -1;
+	return std::pair<std::string, Texture>("NotFound", Texture()); //net so geil...
 }

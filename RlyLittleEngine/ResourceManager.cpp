@@ -45,15 +45,17 @@ std::string ResourceManager::readFile(std::string fileDir) { //Unschöne, temporä
 	return content;
 }
 
-Texture ResourceManager::LoadPNGTexture(std::string& fileDir) {
-	int index = Util::PosStringInMap(_textures, fileDir);
-	if (index != 0) {
-		//return mit Textur pointer an indexstelle
+Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
+	std::pair<std::string, Texture> element = Util::PosStringInMap(_textures, fileDir);
+	if (element.first.compare("NotFound")) {
+		std::cout << "Bereits geladen" << std::endl;
+		Texture* tex = &element.second;
+		return tex;
 	}
 	
 	_textures.insert(std::pair<std::string, Texture>(fileDir, Texture()));
 
-	/*GLuint tex_2d = SOIL_load_OGL_texture("img.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
+	/*GLuint tex_2d = SOIL_load_OGL_texture("/res/textures/" + fileDir, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
 			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
 	if (!tex_2d)
@@ -62,6 +64,6 @@ Texture ResourceManager::LoadPNGTexture(std::string& fileDir) {
 	}*/
 
 
-	Texture tex;
-	return tex;
+	Texture* texd = &Texture();
+	return texd;
 }
