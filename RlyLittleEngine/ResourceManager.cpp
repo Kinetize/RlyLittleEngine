@@ -1,10 +1,12 @@
 #include "ResourceManager.h"
 #include <iostream> //temp
 
-void ResourceManager::Init() {
+/*void ResourceManager::Init() {
 	_textures = std::map<std::string, Texture>();
 	_textures.insert(std::pair<std::string, Texture>("defTex", Texture())); //ToDo: Def Textur
-}
+}*/
+
+std::map<std::string, Texture> ResourceManager::_textures = std::map<std::string, Texture>();
 
 bool ResourceManager::readFile(std::string& fileDir, std::vector<char>& content) {//Nur momentan public...
 	std::ifstream file(fileDir, std::ios::binary);
@@ -44,8 +46,9 @@ std::string ResourceManager::readFile(std::string fileDir) { //Unschöne, temporä
 }
 
 Texture ResourceManager::LoadPNGTexture(std::string& fileDir) {
-	if (Util::PosStringInMap(_textures, fileDir) == 0) {
-		std::cout << "double" << std::endl;
+	int index = Util::PosStringInMap(_textures, fileDir);
+	if (index != 0) {
+		//return mit Textur pointer an indexstelle
 	}
 	
 	_textures.insert(std::pair<std::string, Texture>(fileDir, Texture()));

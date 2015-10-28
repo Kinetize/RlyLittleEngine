@@ -2,7 +2,7 @@
 
 int Util::PosStringInMap(std::map<std::string, Texture> sMap, std::string text) { //verallgemeinern?
 	
-	int index = 0;
+	int index = -1;
 	
 	for (auto & element : sMap) {
 		index++;

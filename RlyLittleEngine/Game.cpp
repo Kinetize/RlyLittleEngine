@@ -47,8 +47,6 @@ bool Game::Init(Window* window, GameObject* root, Shader* shader) { //kinda senc
 	_root = root;
 	_shader = shader;
 
-	ResourceManager::Init();
-
 	return true;
 }
 

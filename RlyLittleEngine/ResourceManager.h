@@ -9,8 +9,6 @@
 
 class ResourceManager {
 public:
-	static void Init();
-
 	static bool readFile(std::string& fileDir, std::vector<char>& content); //Nur momentan public...
 	static std::string readFile(std::string fileDir); //Unschöne, temporäre Methode, Nur momentan public...
 	static Texture LoadPNGTexture(std::string& fileDir);//.../res/textures mit rein nehmen 
