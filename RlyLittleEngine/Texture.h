@@ -9,6 +9,8 @@ class Texture {
 public:
 	Texture(int id);
 
+	void Bind();
+
 private:
 	GLuint _id; 
 };

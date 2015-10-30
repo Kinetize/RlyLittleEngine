@@ -1,11 +1,6 @@
 #include "ResourceManager.h"
 #include <iostream> //temp
 
-/*void ResourceManager::Init() {
-	_textures = std::map<std::string, Texture>();
-	_textures.insert(std::pair<std::string, Texture>("defTex", Texture())); //ToDo: Def Textur
-}*/
-
 std::map<std::string, Texture> ResourceManager::_textures = std::map<std::string, Texture>();
 
 bool ResourceManager::readFile(std::string& fileDir, std::vector<char>& content) {//Nur momentan public...
@@ -53,8 +48,8 @@ Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
 	}
 	
 	std::string dir = "/res/textures/" + fileDir + ".png";
-	/*GLuint id = SOIL_load_OGL_texture(dir.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);*/int id = 0;
+	GLuint id = SOIL_load_OGL_texture(dir.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
+			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
 	if (!id)
 	{
@@ -64,5 +59,5 @@ Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
 	std::pair<std::string, Texture> textureElement = std::pair<std::string, Texture>(fileDir, Texture(id));
 	_textures.insert(textureElement);
 
-	return &textureElement.second;
+	return &textureElement.second;//texturen löschen...
 }
