@@ -7,7 +7,7 @@ GameObject::GameObject(int temp) :
 
 }
 
-void GameObject::UpdateAll(float delta) {
+void GameObject::UpdateAll(const float delta) {
 	Update(delta);
 
 	for (auto & element : children) {
@@ -47,7 +47,7 @@ void GameObject::AddComponent(GameComponent* component) {
 	components.push_back(component);
 }
 
-void GameObject::Update(float delta) {
+void GameObject::Update(const float delta) {
 
 }
 

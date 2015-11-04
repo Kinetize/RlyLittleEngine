@@ -1,7 +1,8 @@
 #include "ResourceManager.h"
 #include <iostream> //temp
 
-std::map<std::string, Texture> ResourceManager::_textures = std::map<std::string, Texture>();
+std::vector<TexResource> ResourceManager::_textures = std::vector<TexResource>();
+//std::map<std::string, int> ResourceManager::_resourceGuard = std::map<std::string, int>();
 
 bool ResourceManager::readFile(std::string& fileDir, std::vector<char>& content) {//Nur momentan public...
 	std::ifstream file(fileDir, std::ios::binary);
@@ -40,14 +41,31 @@ std::string ResourceManager::readFile(std::string fileDir) { //Unschöne, temporä
 	return content;
 }
 
-Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
-	std::pair<std::string, Texture> element = Util::PosStringInMap(_textures, fileDir);
-	if (element.first.compare("NotFound")) {
-		std::cout << "Bereits geladen" << std::endl;
-		return &element.second;
+Texture* ResourceManager::UseTexture(std::string& fileDir) {
+	int index = TexInMap(fileDir);
+	if (index > -1) {
+		_textures[index].users++;
+		return &_textures[index].tex;
 	}
-	
-	std::string dir = "/res/textures/" + fileDir + ".png";
+
+	if(fileDir.size() > 3 && fileDir.substr(fileDir.size() - 4, fileDir.size() - 1).compare(".png"))
+		return LoadPNGTexture(fileDir);
+	else
+		return LoadPNGTexture(fileDir); //Eigentlich Fehlermeldung, anderer Dateityp o.ä.
+}
+
+void ResourceManager::UnuseTexture(Texture* texture) {
+	int index = TexInMap(texture);
+
+	if (index > -1) {		
+		if (--_textures[index].users < 1) {
+			//Element löschen, Texure ausm Speicher kicken, Vector auffüllen etc
+		}
+	}
+}
+
+Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) { //nicht zufrieden mit Aufteilung
+	std::string dir = "/res/textures/" + fileDir;
 	GLuint id = SOIL_load_OGL_texture(dir.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
 			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
 
@@ -55,9 +73,41 @@ Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) {
 	{
 		//Error...
 	}
+ 
+	TexResource textureElement; //Naja...
+	textureElement.fileDir = fileDir;
+	textureElement.tex = Texture(id);
+	textureElement.tex.Init();
+	textureElement.users = 1;
+	_textures.push_back(textureElement);
 
-	std::pair<std::string, Texture> textureElement = std::pair<std::string, Texture>(fileDir, Texture(id));
-	_textures.insert(textureElement);
+	return &textureElement.tex;//texturen löschen...
+}
 
-	return &textureElement.second;//texturen löschen...
+int ResourceManager::TexInMap(std::string& text) { //verallgemeinern?
+
+	int index = -1;
+
+	for (auto& element : _textures) {
+		index++;
+
+		if (element.fileDir.compare(text) == 0)
+			return index;
+	}
+
+	return -1;
+}
+
+int ResourceManager::TexInMap(Texture* tex) { //verallgemeinern?
+
+	int index = -1;
+
+	for (auto& element : _textures) {
+		index++;
+
+		if (element.tex.GetID() == tex->GetID())
+			return index;
+	}
+
+	return -1;
 }

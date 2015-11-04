@@ -37,20 +37,26 @@ void Sprite::Init() {
 	vertexData[5].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[5].pos.SetY(_pos.GetY() + _dimensions.GetY());
 
-	for (int i = 0; i < 6; i++) { //Konstanten...
-		vertexData[i].color.SetX(255);
-		vertexData[i].color.SetY(255);
-		vertexData[i].color.SetZ(0);
-		vertexData[i].color.SetW(255);
-	}
+	vertexData[0].texCoord.SetX(1.0f);
+	vertexData[0].texCoord.SetY(1.0f);
+	vertexData[1].texCoord.SetX(0.0f);
+	vertexData[1].texCoord.SetY(1.0f);
+	vertexData[2].texCoord.SetX(0.0f);
+	vertexData[2].texCoord.SetY(0.0f);
 		
+	vertexData[3].texCoord.SetX(0.0f);
+	vertexData[3].texCoord.SetY(0.0f);
+	vertexData[1].texCoord.SetX(1.0f);
+	vertexData[1].texCoord.SetY(0.0f);
+	vertexData[2].texCoord.SetX(1.0f);
+	vertexData[2].texCoord.SetY(1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW); //Static für den Moment...
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Sprite::Update(float delta) {
+void Sprite::Update(const float delta) {
 
 }
 
@@ -59,7 +65,7 @@ void Sprite::Render(const Shader* shader, const Mesh* mesh, const Area area) con
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, pos));//Konstanten...
-	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*) offsetof(Vertex, color));//Konstanten...
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, texCoord));//Konstanten...
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glDisableVertexAttribArray(0);

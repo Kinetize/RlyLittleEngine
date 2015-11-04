@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include <iostream> //temp
 
 Shader::Shader() :
 	_programID(0),
@@ -42,6 +43,7 @@ void Shader::Link() {
 		glDeleteProgram(_programID);
 		glDeleteShader(_vertexSID);
 		glDeleteShader(_fragmentSID);
+		std::cout << "couldnt link shader" << std::endl;
 		return;
 	}
 
@@ -87,6 +89,15 @@ void Shader::CompileShader(const std::string& shaderDir, GLuint id) {
 	glGetShaderiv(id, GL_COMPILE_STATUS, &sucess);
 
 	if (!sucess) {//Error Log etc
+		GLint logSize = 0;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logSize);
+
+		std::vector<GLchar> errorLog(logSize);
+		glGetShaderInfoLog(id, logSize, &logSize, &errorLog[0]);
+		std::string log(errorLog.begin(), errorLog.end());
+		std::cout << "couldnt compile shader" << std::endl;
+		std::cout << log << std::endl;
+
 		glDeleteShader(id);
 		return;
 	}

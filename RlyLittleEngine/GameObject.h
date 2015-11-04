@@ -15,7 +15,7 @@ class GameObject {
 public:
 	GameObject(int temp);
 
-	void UpdateAll(float delta);
+	void UpdateAll(const float delta);
 	void RenderAll(const Shader* shader, const Mesh* mesh, const Area area) const;
 
 	void AddChildren(GameObject* child);
@@ -25,7 +25,7 @@ private:
 	std::vector<GameObject*> children;
 	std::vector<GameComponent*> components;
 
-	virtual void Update(float delta);
+	virtual void Update(const float delta);
 	virtual void Render(const Shader* shader, const Mesh* mesh, const Area area) const;
 
 };

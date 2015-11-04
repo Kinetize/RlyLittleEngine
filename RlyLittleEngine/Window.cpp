@@ -1,6 +1,4 @@
-#include "window.h"
-#include <SDL/SDL.h>
-#include <GL/glew.h>
+#include "Window.h"
 
 Window::Window(int width, int height, const std::string& title) :
 	_width(width),
@@ -25,6 +23,7 @@ Window::Window(int width, int height, const std::string& title) :
 
 	_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	_glContext = SDL_GL_CreateContext(_window);
+	glEnable(GL_TEXTURE_2D);
 
 	SDL_GL_SetSwapInterval(1);
 

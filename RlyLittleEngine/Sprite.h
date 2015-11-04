@@ -23,7 +23,7 @@ private:
 	Vector2f _dimensions;
 
 	void Init();
-	void Update(float delta) override;
+	void Update(const float delta) override;
 	void Render(const Shader* shader, const Mesh* mesh, const Area area) const override;
 };
 

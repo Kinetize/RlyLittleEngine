@@ -3,11 +3,12 @@
 #pragma once
 
 #include <map>
+#include <SDL/SDL.h>
 #include "Texture.h"
 
 class Util {
 public:
-	static std::pair<std::string, Texture> PosStringInMap(std::map<std::string, Texture> map, std::string text); //verallgemeinern?
+	static void Delay(int miliseconds);
 
 };
 

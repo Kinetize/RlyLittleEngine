@@ -6,6 +6,7 @@
 //ERROR HANDLING!!!!
 //Kommentare...
 
+//NOW TODO: Tex Sampler2D, Vertex TexCoord
 int main(int argc, char** argv){
 
 	Game game("littleEngine");

@@ -6,10 +6,10 @@
 #include "Vector4b.h"
 
 struct Vertex {/*Vertex Struct nur temporär da unschön in momentaner form */
-	inline Vertex() : pos(Vector2f(0, 0)), color(Vector4b(0, 0, 0, 0)) {}
+	inline Vertex() : pos(Vector2f(0, 0)), texCoord(Vector2f(0, 0)) {}
 
 	Vector2f	pos;
-	Vector4b	color;
+	Vector2f	texCoord;
 };
 
 #endif

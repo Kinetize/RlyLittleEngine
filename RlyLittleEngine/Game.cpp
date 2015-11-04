@@ -35,9 +35,8 @@ void Game::start() {
 		std::cerr << "Failed to Init" << std::endl;
 
 	//Test
-	std::string test = "h";
-	ResourceManager::LoadPNGTexture(test);
-	ResourceManager::LoadPNGTexture(test);
+	std::string test = "test.png";
+	ResourceManager::UseTexture(test);
 
 	Run();
 }
@@ -96,12 +95,16 @@ void Game::Run() {
 			frames++;
 		}
 		else
-			SDL_Delay(1);
+			Util::Delay(1);
 	}
 }
 
 void Game::Stop() {
 	_run = false;
+
+	//ResourceManager::UnuseTexture(test);
+	//ResourceManager::UnuseTexture(test2);
+
 	SDL_Quit();
 	//TODO: Cleanup, Error-Handling etc...
 }
