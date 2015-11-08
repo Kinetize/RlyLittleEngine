@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Sprite.h"
 #include "Shader.h"
+#include "ErrorManager.h"
 #include<iostream>
 #include<Windows.h>
 #include <SDL/SDL.h>
@@ -26,6 +27,8 @@ private:
 	Window*			_window;
 	GameObject*		_root;
 	Shader*			_shader;
+	Texture*		_tex;//TEMP!
+	//Texture			_tex;//TEMP!
 
 	std::string		_title;
 

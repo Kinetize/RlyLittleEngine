@@ -64,6 +64,10 @@ void Shader::SetUniformF(const std::string& uName, float value) {
 	glUniform1f(GetUniformLocation(uName), value);
 }
 
+void Shader::SetUniformI(const std::string& uName, int value) {
+	glUniform1i(GetUniformLocation(uName), value);
+}
+
 void Shader::Bind() const {
 	glUseProgram(_programID);
 
@@ -79,7 +83,7 @@ void Shader::Unbind() const {
 }
 
 void Shader::CompileShader(const std::string& shaderDir, GLuint id) {
-	std::string content = ResourceManager::readFile(shaderDir);
+	std::string content = ResourceManager::ReadFile(shaderDir);
 	const char* contentPtr = content.c_str(); //Dirty...
 	glShaderSource(id, 1, &contentPtr, nullptr);
 

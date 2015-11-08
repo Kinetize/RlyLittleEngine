@@ -7,6 +7,7 @@ Window::Window(int width, int height, const std::string& title) :
 	_input(this),
 	_closeRequested(false)
 {
+	//Init Stuff woanders?
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -24,6 +25,9 @@ Window::Window(int width, int height, const std::string& title) :
 	_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	_glContext = SDL_GL_CreateContext(_window);
 	glEnable(GL_TEXTURE_2D);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
 	SDL_GL_SetSwapInterval(1);
 

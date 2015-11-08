@@ -4,12 +4,13 @@
 
 #include <GL/glew.h>
 #include <string>
+#include <vector>
 
 class Texture {
 public:
-	Texture(int id);
+	Texture();
 
-	void Init();
+	void Init(unsigned long width, unsigned long height, std::vector<unsigned char>& data);
 	void Delete();
 	void Bind();
 

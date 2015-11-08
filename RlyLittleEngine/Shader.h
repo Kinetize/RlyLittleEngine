@@ -17,6 +17,7 @@ public:
 
 	void AddAttribute(const std::string& attribName);
 	void SetUniformF(const std::string& uName, float value);
+	void SetUniformI(const std::string& uName, int value);
 
 	void Bind() const;
 	void Unbind() const;

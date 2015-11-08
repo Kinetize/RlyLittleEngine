@@ -2,9 +2,8 @@
 #include <iostream> //temp
 
 std::vector<TexResource> ResourceManager::_textures = std::vector<TexResource>();
-//std::map<std::string, int> ResourceManager::_resourceGuard = std::map<std::string, int>();
 
-bool ResourceManager::readFile(std::string& fileDir, std::vector<char>& content) {//Nur momentan public...
+bool ResourceManager::ReadFile(std::string& fileDir, std::vector<unsigned char>& content) {//Nur momentan public...
 	std::ifstream file(fileDir, std::ios::binary);
 
 	if (!file)
@@ -16,14 +15,14 @@ bool ResourceManager::readFile(std::string& fileDir, std::vector<char>& content)
 	size -= file.tellg();
 
 	content.resize(size);
-	file.read(&(content[0]), size);
+	file.read((char *)&(content[0]), size);
 
 	file.close();
 
 	return true;
 }
 
-std::string ResourceManager::readFile(std::string fileDir) { //Unschöne, temporäre Methode, Nur momentan public...
+std::string ResourceManager::ReadFile(std::string fileDir) { //Unschöne, temporäre Methode, Nur momentan public...
 	std::ifstream file(fileDir);
 
 	if (!file)
@@ -41,6 +40,24 @@ std::string ResourceManager::readFile(std::string fileDir) { //Unschöne, temporä
 	return content;
 }
 
+bool ResourceManager::WriteFile(std::string& fileDir, std::string& text, bool clearFile) {
+	std::fstream file;
+	
+	if(clearFile)
+		file = std::fstream(fileDir, std::ios::out | std::ios::trunc);
+	else
+		file = std::fstream(fileDir, std::ios::out | std::ios::app);
+
+	if (!file)
+		return false;
+
+	file << std::endl << text;
+
+	file.close();
+
+	return true;
+}
+
 Texture* ResourceManager::UseTexture(std::string& fileDir) {
 	int index = TexInMap(fileDir);
 	if (index > -1) {
@@ -48,10 +65,10 @@ Texture* ResourceManager::UseTexture(std::string& fileDir) {
 		return &_textures[index].tex;
 	}
 
-	if(fileDir.size() > 3 && fileDir.substr(fileDir.size() - 4, fileDir.size() - 1).compare(".png"))
+	//if(fileDir.size() > 3 && fileDir.substr(fileDir.size() - 4, fileDir.size() - 1).compare(".png")) //eig bei "." splitten
 		return LoadPNGTexture(fileDir);
-	else
-		return LoadPNGTexture(fileDir); //Eigentlich Fehlermeldung, anderer Dateityp o.ä.
+	//else
+	//	return LoadPNGTexture(fileDir); //Eigentlich Fehlermeldung, anderer Dateityp o.ä.
 }
 
 void ResourceManager::UnuseTexture(Texture* texture) {
@@ -65,26 +82,41 @@ void ResourceManager::UnuseTexture(Texture* texture) {
 }
 
 Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) { //nicht zufrieden mit Aufteilung
-	std::string dir = "/res/textures/" + fileDir;
-	GLuint id = SOIL_load_OGL_texture(dir.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
+	std::string msg = "start"; //temp
+	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
-	if (!id)
-	{
-		//Error...
-	}
- 
-	TexResource textureElement; //Naja...
-	textureElement.fileDir = fileDir;
-	textureElement.tex = Texture(id);
-	textureElement.tex.Init();
-	textureElement.users = 1;
-	_textures.push_back(textureElement);
 
-	return &textureElement.tex;//texturen löschen...
+	std::vector<unsigned char> inData, outData;
+	unsigned long width, height;
+	std::string dir = "C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/res/textures/" + fileDir; //relativ paths...
+	if (!ReadFile(dir, inData))
+		std::cout << "texfile error" << std::endl;
+
+
+	msg = "filewasread"; //temp
+	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
+
+
+	if (decodePNG(outData, width, height, &inData[0], inData.size()) != 0)
+		std::cout << "pico error " << std::endl;
+
+	msg = "picodone"; //temp
+	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
+
+	_textures.push_back(TexResource());
+	_textures[_textures.size() - 1].fileDir = fileDir;
+	_textures[_textures.size() - 1].tex.Init(width, height, outData);
+	_textures[_textures.size() - 1].users = 1;
+
+
+	msg = "texInit"; //temp
+	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
+
+
+	return &_textures[_textures.size() - 1].tex;//texturen löschen...
 }
 
-int ResourceManager::TexInMap(std::string& text) { //verallgemeinern?
+int ResourceManager::TexInMap(std::string& text) { //verallgemeinern mit Templates/Lambda
 
 	int index = -1;
 
@@ -98,7 +130,7 @@ int ResourceManager::TexInMap(std::string& text) { //verallgemeinern?
 	return -1;
 }
 
-int ResourceManager::TexInMap(Texture* tex) { //verallgemeinern?
+int ResourceManager::TexInMap(Texture* tex) { //verallgemeinern mit Templates/Lambda
 
 	int index = -1;
 

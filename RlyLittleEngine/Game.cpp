@@ -8,7 +8,8 @@ Game::Game(const std::string title, int width, int height, int fps) :
 	_screenWidth(width),
 	_screenHeight(height),
 	_timePerFrame(1.0 / (fps - 1)), //weird
-	_temp(0)
+	_temp(0),
+	_tex(nullptr)
 {
 }
 
@@ -26,7 +27,7 @@ void Game::start() {
 	shader.AddAttribute("pos");
 	shader.AddAttribute("color");
 	shader.Link();
-	Sprite sprite(Vector2f(-1, -1), Vector2f(1, 1));
+	Sprite sprite(Vector2f(-1, -1), Vector2f(2, 2));
 	root.AddChildren(&sprite);
 
 	if (Init(&window, &root, &shader))
@@ -34,9 +35,18 @@ void Game::start() {
 	else
 		std::cerr << "Failed to Init" << std::endl;
 
+	ErrorManager::Init();
+
+	std::string msg = "Init";
+	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 	//Test
-	std::string test = "test.png";
-	ResourceManager::UseTexture(test);
+	//_shader->SetUniformI("gSampler", 0);
+	std::string test = "stone.png";
+	//_tex = ResourceManager::UseTexture(test);
+	_tex = ResourceManager::UseTexture(test);
+
+	msg = "tex loaded";
+	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
 	Run();
 }
@@ -102,6 +112,7 @@ void Game::Run() {
 void Game::Stop() {
 	_run = false;
 
+	_tex->Delete();
 	//ResourceManager::UnuseTexture(test);
 	//ResourceManager::UnuseTexture(test2);
 
@@ -114,9 +125,8 @@ void Game::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_shader->Bind();
-
+	_tex->Bind();
 	_temp += 0.02f;
-	_shader->SetUniformF("time", _temp);
 	Mesh* mesh = &Mesh();
 	_root->RenderAll(_shader, mesh, Area());
 

@@ -22,9 +22,8 @@ void Sprite::Init() {
 	glGenBuffers(1, &_vboID);
 	
 	/*Vertex Struct nur temporär da unschön in momentaner form */Vertex vertexData[6]; //Konstanten...
-	
 	vertexData[0].pos.SetX(_pos.GetX() + _dimensions.GetX());
-	vertexData[0].pos.SetX(_pos.GetY() + _dimensions.GetY());
+	vertexData[0].pos.SetY(_pos.GetY() + _dimensions.GetY());
 	vertexData[1].pos.SetX(_pos.GetX());
 	vertexData[1].pos.SetY(_pos.GetY() + _dimensions.GetY());
 	vertexData[2].pos.SetX(_pos.GetX());
@@ -46,10 +45,10 @@ void Sprite::Init() {
 		
 	vertexData[3].texCoord.SetX(0.0f);
 	vertexData[3].texCoord.SetY(0.0f);
-	vertexData[1].texCoord.SetX(1.0f);
-	vertexData[1].texCoord.SetY(0.0f);
-	vertexData[2].texCoord.SetX(1.0f);
-	vertexData[2].texCoord.SetY(1.0f);
+	vertexData[4].texCoord.SetX(1.0f);
+	vertexData[4].texCoord.SetY(0.0f);
+	vertexData[5].texCoord.SetX(1.0f);
+	vertexData[5].texCoord.SetY(1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW); //Static für den Moment...
