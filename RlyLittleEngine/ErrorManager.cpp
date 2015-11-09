@@ -8,24 +8,29 @@ void ErrorManager::Init()
 }
 
 void ErrorManager::SendInformation(InformationType type, std::string& text) {
-	switch (type)
-	{
-	case InformationType::IT_INFO:
-		WriteToLog(type, text);
-		break;
+	WriteToLog(type, text);
 
-	case InformationType::IT_ERROR:
-		WriteToLog(type, text);
-		break;
-
-	case InformationType::IT_FATALERROR:
-		WriteToLog(type, text);
+	if (type == InformationType::IT_FATALERROR)
 		exit(1);
-		break;
-	};
 }
 
 void ErrorManager::WriteToLog(InformationType type, std::string& text) {
 	std::string dir = "C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/Log.html"; //relativ paths
-	ResourceManager::WriteFile(dir, text); //HTML Formatierung je nach Typ etc
+	std::string fText = "";
+
+	switch (type)
+	{
+	case InformationType::IT_INFO:
+		fText = "<font color=#7cfc00><b>[INFO]</b> <font color=#000000>" + text + "<br />";
+		ResourceManager::WriteFile(dir, fText);
+		break;
+
+	case InformationType::IT_ERROR:
+		ResourceManager::WriteFile(dir, text);
+		break;
+
+	case InformationType::IT_FATALERROR:
+		ResourceManager::WriteFile(dir, text);
+		break;
+	};
 }

@@ -41,7 +41,7 @@ void Game::start() {
 	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 	//Test
 	//_shader->SetUniformI("gSampler", 0);
-	std::string test = "stone.png";
+	std::string test = "test.png";
 	//_tex = ResourceManager::UseTexture(test);
 	_tex = ResourceManager::UseTexture(test);
 
