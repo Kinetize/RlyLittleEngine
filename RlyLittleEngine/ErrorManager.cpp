@@ -22,15 +22,14 @@ void ErrorManager::WriteToLog(InformationType type, std::string& text) {
 	{
 	case InformationType::IT_INFO:
 		fText = "<font color=#7cfc00><b>[INFO]</b> <font color=#000000>" + text + "<br />";
-		ResourceManager::WriteFile(dir, fText);
 		break;
 
 	case InformationType::IT_ERROR:
-		ResourceManager::WriteFile(dir, text);
 		break;
 
 	case InformationType::IT_FATALERROR:
-		ResourceManager::WriteFile(dir, text);
 		break;
 	};
+
+	ResourceManager::WriteFile(dir, text);
 }
