@@ -82,36 +82,19 @@ void ResourceManager::UnuseTexture(Texture* texture) {
 }
 
 Texture* ResourceManager::LoadPNGTexture(std::string& fileDir) { //nicht zufrieden mit Aufteilung
-	std::string msg = "start"; //temp
-	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
-
-
 	std::vector<unsigned char> inData, outData;
 	unsigned long width, height;
 	std::string dir = "C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/res/textures/" + fileDir; //relativ paths...
 	if (!ReadFile(dir, inData))
 		std::cout << "texfile error" << std::endl;
 
-
-	msg = "filewasread"; //temp
-	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
-
-
 	if (decodePNG(outData, width, height, &inData[0], inData.size()) != 0)
 		std::cout << "pico error " << std::endl;
-
-	msg = "picodone"; //temp
-	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
 	_textures.push_back(TexResource());
 	_textures[_textures.size() - 1].fileDir = fileDir;
 	_textures[_textures.size() - 1].tex.Init(width, height, outData);
 	_textures[_textures.size() - 1].users = 1;
-
-
-	msg = "texInit"; //temp
-	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
-
 
 	return &_textures[_textures.size() - 1].tex;//texturen löschen...
 }

@@ -36,16 +36,14 @@ void Game::start() {
 		std::cerr << "Failed to Init" << std::endl;
 
 	ErrorManager::Init();
-
-	std::string msg = "Init";
-	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 	//Test
 	//_shader->SetUniformI("gSampler", 0);
 	std::string test = "test.png";
 	//_tex = ResourceManager::UseTexture(test);
 	_tex = ResourceManager::UseTexture(test);
 
-	msg = "tex loaded";
+
+	std::string msg = "Everything was loaded, Game will run";
 	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
 	Run();
@@ -89,8 +87,12 @@ void Game::Run() {
 			_window->UpdateInputs();
 			_root->UpdateAll(_timePerFrame);
 
-			if (_window->GetCloseRequested())
+			if (_window->GetCloseRequested()) {
+				std::string msg = "Game stopped running without any errors";
+				ErrorManager::SendInformation(InformationType::IT_INFO, msg);
+
 				Stop();
+			}
 
 			needToRender = true;
 			unprocessedTime -= _timePerFrame;

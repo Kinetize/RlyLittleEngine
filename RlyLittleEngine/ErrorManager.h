@@ -17,6 +17,8 @@ public:
 	static void SendInformation(InformationType type, std::string& text);
 
 private:
+	static bool init;
+
 	static void WriteToLog(InformationType type, std::string& text);
 };
 

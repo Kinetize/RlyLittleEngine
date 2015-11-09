@@ -7,9 +7,9 @@
 //Kommentare...
 //Mip Maps, Filter(ffax?) etc
 //Indices nötig? schließlich nur 2d, aber schöner...
-//Unöntige Imports, libs(z.b. devil), etc rauswerfen
+//Unöntige Imports, libs(z.b. devil), etc rauswerfen (pico etwas langsam --> ersetzen?)
+//Tranform Uniform
 
-//NOW TODO: Tex Sampler2D, Vertex TexCoord
 int main(int argc, char** argv){
 
 	Game game("littleEngine");
