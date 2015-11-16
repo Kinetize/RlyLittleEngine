@@ -2,7 +2,11 @@
 #define GAME_COMPONENT_H
 #pragma once
 
-#include "GameObject.h"
+#include "Area.h"
+
+class GameObject; //Sllte weg...
+class Mesh;
+class Shader;
 
 class GameComponent {
 public:

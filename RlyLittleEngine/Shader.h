@@ -5,7 +5,6 @@
 #include <string>
 #include <fstream>
 #include <GL/glew.h>
-#include "ResourceManager.h"
 
 class Shader {
 public:
@@ -18,9 +17,13 @@ public:
 	void AddAttribute(const std::string& attribName);
 	void SetUniformF(const std::string& uName, float value);
 	void SetUniformI(const std::string& uName, int value);
-
+	
 	void Bind() const;
 	void Unbind() const;
+
+	void Delete();
+
+	inline GLuint GetID() { return _programID; }
 private:
 	GLuint _programID;
 	GLuint _vertexSID;

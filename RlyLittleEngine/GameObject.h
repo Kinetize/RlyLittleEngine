@@ -2,18 +2,21 @@
 #define GAME_OBJECT_H
 #pragma once
 
-#include "Mesh.h"
+//#include "Mesh.h"
 #include "Area.h"
-#include "Shader.h"
+//#include "Shader.h"
 #include "GameComponent.h"
 #include <vector>
 
-class GameComponent; //sollte weg...
+//class GameComponent; //sollte weg...
+class Mesh;
+//class Area;
+class Shader;
 
 class GameObject {
 
 public:
-	GameObject(int temp);
+	GameObject();
 
 	void UpdateAll(const float delta);
 	void RenderAll(const Shader* shader, const Mesh* mesh, const Area area) const;

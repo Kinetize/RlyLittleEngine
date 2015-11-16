@@ -1,8 +1,8 @@
 #include "Sprite.h"
 
 Sprite::Sprite(Vector2f pos, Vector2f dimensions) :
-	GameObject(1),
-	_vboID(0),
+	GameObject(),
+	_mesh(nullptr),
 	_texture(nullptr), //deftextur
 	_pos(pos),
 	_dimensions(dimensions)
@@ -11,48 +11,16 @@ Sprite::Sprite(Vector2f pos, Vector2f dimensions) :
 }
 
 Sprite::~Sprite() {
-	if (_vboID != 0)
-		glDeleteBuffers(1, &_vboID);
+	ResourceManager::UnuseResource<Mesh>(_mesh);
+	ResourceManager::UnuseResource<Texture>(_texture);
 }
 
-void Sprite::Init() {
-	if (_vboID != 0)
-		return;
-	
-	glGenBuffers(1, &_vboID);
-	
-	/*Vertex Struct nur temporär da unschön in momentaner form */Vertex vertexData[6]; //Konstanten...
-	vertexData[0].pos.SetX(_pos.GetX() + _dimensions.GetX());
-	vertexData[0].pos.SetY(_pos.GetY() + _dimensions.GetY());
-	vertexData[1].pos.SetX(_pos.GetX());
-	vertexData[1].pos.SetY(_pos.GetY() + _dimensions.GetY());
-	vertexData[2].pos.SetX(_pos.GetX());
-	vertexData[2].pos.SetY(_pos.GetY());
+void Sprite::Init() {	
+	std::string temp = "";
+	_mesh = ResourceManager::UseResource<Mesh>(temp);
 
-	vertexData[3].pos.SetX(_pos.GetX());
-	vertexData[3].pos.SetY(_pos.GetY());
-	vertexData[4].pos.SetX(_pos.GetX() + _dimensions.GetX());
-	vertexData[4].pos.SetY(_pos.GetY());
-	vertexData[5].pos.SetX(_pos.GetX() + _dimensions.GetX());
-	vertexData[5].pos.SetY(_pos.GetY() + _dimensions.GetY());
-
-	vertexData[0].texCoord.SetX(1.0f);
-	vertexData[0].texCoord.SetY(1.0f);
-	vertexData[1].texCoord.SetX(0.0f);
-	vertexData[1].texCoord.SetY(1.0f);
-	vertexData[2].texCoord.SetX(0.0f);
-	vertexData[2].texCoord.SetY(0.0f);
-		
-	vertexData[3].texCoord.SetX(0.0f);
-	vertexData[3].texCoord.SetY(0.0f);
-	vertexData[4].texCoord.SetX(1.0f);
-	vertexData[4].texCoord.SetY(0.0f);
-	vertexData[5].texCoord.SetX(1.0f);
-	vertexData[5].texCoord.SetY(1.0f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW); //Static für den Moment...
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	temp = "test.png";
+	_texture = ResourceManager::UseResource<Texture>(temp);
 }
 
 void Sprite::Update(const float delta) {
@@ -60,13 +28,5 @@ void Sprite::Update(const float delta) {
 }
 
 void Sprite::Render(const Shader* shader, const Mesh* mesh, const Area area) const {//Mesh Klasse...
-	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, pos));//Konstanten...
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, texCoord));//Konstanten...
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	glDisableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	_mesh->Draw();
 }

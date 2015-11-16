@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Shader.h"
 #include "ErrorManager.h"
+#include "RenderingEngine.h"
 #include<iostream>
 #include<Windows.h>
 #include <SDL/SDL.h>
@@ -19,32 +20,21 @@ public:
 	Game(const std::string title, int width = 800, int height = 600, int fps = 60);
 	~Game();
 
-	inline Window* GetWindow() const { return _window; }
+	inline Window GetWindow() const { return _window; }
 
 	void start();
 
-private:
-	Window*			_window;
-	GameObject*		_root;
-	Shader*			_shader;
-	Texture*		_tex;//TEMP!
-	//Texture			_tex;//TEMP!
+private://Nicht mehr überall ptr
+	Window				_window;
+	RenderingEngine		_renderingEngine;
+	GameObject			_root;
+		
+	bool				_run;
 
-	std::string		_title;
+	float				_timePerFrame;
 
-	bool			_run;
-
-	int				_screenWidth;
-	int				_screenHeight;
-
-	float			_timePerFrame;
-	float			_temp;
-
-	bool Init(Window* window, GameObject* root, Shader* shader);
 	void Run();
 	void Stop();
-
-	void Render();
 };
 
 #endif

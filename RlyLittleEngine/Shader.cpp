@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include "ResourceManager.h"
 #include <iostream> //temp
 
 Shader::Shader() :
@@ -80,6 +81,11 @@ void Shader::Unbind() const {
 
 	for (int i = 0; i < _attribCount; i++)
 		glDisableVertexAttribArray(i);
+}
+
+void Shader::Delete() {
+	if(_programID)
+		glDeleteProgram(_programID);
 }
 
 void Shader::CompileShader(const std::string& shaderDir, GLuint id) {

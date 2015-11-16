@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(int temp) :
+GameObject::GameObject() :
 	children(std::vector<GameObject*>(0)),
 	components(std::vector<GameComponent*>(0))
 {

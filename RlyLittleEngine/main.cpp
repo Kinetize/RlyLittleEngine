@@ -9,6 +9,8 @@
 //Indices nötig? schließlich nur 2d, aber schöner...
 //Unöntige Imports, libs(z.b. devil), etc rauswerfen (pico etwas langsam --> ersetzen?)
 //Tranform Uniform
+//Licht
+//Klassen in Dateien zusammenfassen
 
 int main(int argc, char** argv){
 

@@ -9,32 +9,40 @@
 #include "Util.h"
 #include "picoPNG.h"
 #include "ErrorManager.h"
+#include "Mesh.h"
+#include "Vertex.h"
+#include "Shader.h"
 
-struct TexResource { //anstatt map?
-	TexResource() : fileDir(""), tex(Texture()), users(-1) {};
+//resource-Oberklasse für Shader, Mesh, Texture? Dann alles in einen Vector?
+template<class T>
+struct Resource { 
+	Resource() : resource(T()), fileDir(""), users(-1) {};
 
+	T resource;
 	std::string fileDir;
-	Texture tex;
 	int users;
 };
 
 class ResourceManager { //+Guard über offene Files...
-public: 
+public:
 	static bool ReadFile(std::string& fileDir, std::vector<unsigned char>& content); //Nur momentan public...
 	static std::string ReadFile(std::string fileDir); //Unschöne, temporäre Methode, Nur momentan public...
 
 	static bool WriteFile(std::string& fileDir, std::string& text, bool clearFile = false);
 
-	static Texture* UseTexture(std::string& fileDir);
-	static void UnuseTexture(Texture* tex);
+	template<class T> static T* UseResource(std::string& fileDir);
+	template<class T> static void UnuseResource(T* tex);
 
 private:
-	static std::vector<TexResource> _textures; //Int zählt die Anzahl der Nutzer --> <= 0? Löschen
+	static std::vector<Resource<Shader>>	_shaders;
+	static std::vector<Resource<Mesh>>		_meshes;
+	static std::vector<Resource<Texture>>	_textures;
 	
-	static Texture* LoadPNGTexture(std::string& fileDir);//.../res/textures mit rein nehmen; def Texture
-	static int TexInMap(std::string& text); //verallgemeinern mit Templates/Lambda?
-	static int TexInMap(Texture* tex); //verallgemeinern mit Templates/Lambda?
+	template<class T> static void InitResource();
+	template<class T> static int ResInVector(std::string& text);
+	template<class T> static int ResInVector(T* tex); 
+	template<class T> static std::vector<Resource<T>>* GetSuitableVector();
+	static void LoadPNGTexture(std::string& fileDir);//.../res/textures mit rein nehmen; def Texture
 };
 
 #endif
-

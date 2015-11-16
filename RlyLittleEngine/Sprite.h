@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <cstddef>
+#include "ResourceManager.h"
 #include "Vertex.h"
 #include "Vector2f.h"
 #include "GameObject.h"
@@ -16,11 +17,11 @@ public:
 	~Sprite();
 
 private:
-	GLuint	 _vboID;
-	Texture* _texture;
+	Mesh*		_mesh;
+	Texture*	_texture;
 	
-	Vector2f _pos;
-	Vector2f _dimensions;
+	Vector2f	_pos;
+	Vector2f	_dimensions;
 
 	void Init();
 	void Update(const float delta) override;
