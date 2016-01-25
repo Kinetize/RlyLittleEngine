@@ -5,33 +5,51 @@ Game::Game(const std::string title, int width, int height, int fps) :
 	_renderingEngine(RenderingEngine()),
 	_root(GameObject()),
 	_run(false),
-	_timePerFrame(1.0 / (fps - 1)) //weird
+	_timePerFrame(1.0f / (fps - 1)) //weird
 {
 }
 
-
 Game::~Game() {
-
+	if (_run)
+		Stop(InformationType::IT_FATALERROR);
 }
 
-void Game::start() {
-	ErrorManager::Init();
+void Game::Start() {
+	ErrorManager::Init(this);
+	ResourceManager::Init();
 	_renderingEngine.Init(&_root);
-	Sprite sprite(Vector2f(-1, -1), Vector2f(2, 2));
+	Sprite sprite(Vector2f(-1, -1), Vector2f(2, 2), DEPTH_LEVEL::DL_3);
 	_root.AddChildren(&sprite);
 
-	Shader shader;
-
 	_run = true;
-
+	
 	std::string msg = "Everything was loaded, Game will run";
 	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
 	Run();
 }
 
+void Game::Stop(InformationType type) {
+	_run = false;
+
+	_renderingEngine.ShutDown();
+	ResourceManager::ShutDown();
+	std::string inf;
+	if (type == InformationType::IT_INFO) {
+		inf = "Game stopped running without any Errors";
+		ErrorManager::SendInformation(type, inf);
+	}
+	else {
+		inf = "Game stopped running after an Error";
+		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
+	}
+	ErrorManager::ShutDown();
+
+	SDL_Quit();
+}
+
 void Game::Run() {
-	double lastTime = GetTickCount() / 1000.0;
+	double lastTime = GetTickCount64() / 1000.0;
 	double unprocessedTime = 0;     
 	int frames = 0;
 	double frameCounter = 0;
@@ -40,7 +58,7 @@ void Game::Run() {
 	{
 		bool needToRender = false;
 
-		double startTime = GetTickCount() / 1000.0;
+		double startTime = GetTickCount64() / 1000.0;
 		double timeDif = startTime -lastTime;
 		lastTime = startTime;
 
@@ -60,32 +78,23 @@ void Game::Run() {
 			_window.UpdateInputs();
 			_root.UpdateAll(_timePerFrame);
 
-			if (_window.GetCloseRequested()) {
-				std::string msg = "Game stopped running without any errors";
-				ErrorManager::SendInformation(InformationType::IT_INFO, msg);
-
-				Stop();
-			}
-
 			needToRender = true;
 			unprocessedTime -= _timePerFrame;
+
+			if (_window.GetCloseRequested()) {
+				needToRender = false;
+				Stop(InformationType::IT_INFO);
+			}
 		}
 
 		if (needToRender) {
 			_renderingEngine.Render();
 
 			_window.SwapBuffers();
-			//SDL_GL_SwapWindow(_window->GetSDLWindow());
 
 			frames++;
 		}
-		else
+		else if(_run)
 			Util::Delay(1);
 	}
-}
-
-void Game::Stop() {
-	_run = false;
-
-	SDL_Quit();
 }

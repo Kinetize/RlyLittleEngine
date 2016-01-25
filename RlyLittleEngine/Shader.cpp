@@ -3,6 +3,7 @@
 #include <iostream> //temp
 
 Shader::Shader() :
+	Resource(),
 	_programID(0),
 	_vertexSID(0),
 	_fragmentSID(0),
@@ -14,6 +15,14 @@ Shader::Shader() :
 Shader::~Shader() {
 	if(!_programID)
 		glDeleteProgram(_programID);
+}
+
+bool Shader::Init() {
+	return true;
+}
+
+void Shader::Delete() {
+
 }
 
 void Shader::Compile(const std::string& shaderDir) {//.../res/shaders mit rein nehmen 

@@ -1,0 +1,26 @@
+﻿Der Buildvorgang wurde am 25.01.2016 13:01:53 gestartet.
+     1>Projekt "C:\Users\Nils\Documents\Visual Studio 2015\Projects\RlyLittleEngine\RlyLittleEngine\RlyLittleEngine.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt MMath.cpp
+         MMath.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Nils\Documents\Visual Studio 2015\Projects\RlyLittleEngine\Debug\RlyLittleEngine.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib opengl32.lib glew32.lib SOIL.lib DevIL.lib ILU.lib ILUT.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Nils\Documents\Visual Studio 2015\Projects\RlyLittleEngine\Debug\RlyLittleEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Nils\Documents\Visual Studio 2015\Projects\RlyLittleEngine\Debug\RlyLittleEngine.lib" /MACHINE:X86 Debug\Area.obj
+         Debug\ErrorManager.obj
+         Debug\GameObject.obj
+         Debug\Input.obj
+         Debug\Main.obj
+         Debug\Game.obj
+         Debug\MMath.obj
+         Debug\picoPNG.obj
+         Debug\RenderingEngine.obj
+         Debug\Resource.obj
+         Debug\ResourceManager.obj
+         Debug\Sprite.obj
+         Debug\Util.obj
+         Debug\Window.obj
+         RlyLittleEngine.vcxproj -> C:\Users\Nils\Documents\Visual Studio 2015\Projects\RlyLittleEngine\Debug\RlyLittleEngine.exe
+     1>Die Erstellung von Projekt "C:\Users\Nils\Documents\Visual Studio 2015\Projects\RlyLittleEngine\RlyLittleEngine\RlyLittleEngine.vcxproj" ist abgeschlossen (Build Ziel(e)).
+
+Der Buildvorgang wurde erfolgreich ausgeführt.
+
+Verstrichene Zeit 00:00:00.56

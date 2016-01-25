@@ -19,15 +19,15 @@ void GameObject::UpdateAll(const float delta) {
 	}
 }
 
-void GameObject::RenderAll(const Shader* shader, const Mesh* mesh, const Area area) const {
-	Render(shader, mesh, area);
+void GameObject::RenderAll(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {
+	Render(shader, mesh, dl, area);
 
 	for (auto & element : children) {
-		element->RenderAll(shader, mesh, area);
+		element->RenderAll(shader, mesh, dl, area);
 	}
 
 	for (auto & element : components) {
-		element->Render(shader, mesh, area);
+		element->Render(shader, mesh, dl, area);
 	}
 }
 
@@ -51,6 +51,18 @@ void GameObject::Update(const float delta) {
 
 }
 
-void GameObject::Render(const Shader* shader, const Mesh* mesh, const Area area) const {
+void GameObject::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {
+
+}
+
+GameComponent::GameComponent()
+{
+}
+
+void GameComponent::Update(float delta) {
+
+}
+
+void GameComponent::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {
 
 }

@@ -1,15 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
-#pragma once
 
 #include "Input.h"
 #include "Window.h"
 #include "Sprite.h"
-#include "Shader.h"
-#include "ErrorManager.h"
+#include "Resource.h"
 #include "RenderingEngine.h"
-#include<iostream>
-#include<Windows.h>
+#include <iostream>
+#include <Windows.h>
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 #include <string>
@@ -20,9 +18,10 @@ public:
 	Game(const std::string title, int width = 800, int height = 600, int fps = 60);
 	~Game();
 
-	inline Window GetWindow() const { return _window; }
+	void Start();
+	void Stop(InformationType type); //zweckentfremdet
 
-	void start();
+	inline Window GetWindow() const { return _window; }
 
 private://Nicht mehr überall ptr
 	Window				_window;
@@ -34,8 +33,6 @@ private://Nicht mehr überall ptr
 	float				_timePerFrame;
 
 	void Run();
-	void Stop();
 };
 
 #endif
-

@@ -1,8 +1,7 @@
 #ifndef ERRORMANAGER_H
 #define ERRORMANAGER_H
-#pragma once
 
-#include "ResourceManager.h"
+#include <string>
 
 enum InformationType {
 	IT_INFO = 0,
@@ -10,18 +9,21 @@ enum InformationType {
 	IT_FATALERROR = 2
 };
 
+class Game;
+
 class ErrorManager {
 public:
-	static void Init();
+	static void Init(Game* game);
+	static void ShutDown();
 
 	static void SendInformation(InformationType type, std::string& text);
 
 private:
-	static bool init;
+	static bool _init;
+
+	static Game* _game;
 
 	static void WriteToLog(InformationType type, std::string& text);
 };
-
-
 
 #endif

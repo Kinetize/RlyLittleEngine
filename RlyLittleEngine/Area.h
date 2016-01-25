@@ -1,6 +1,5 @@
 #ifndef AREA_H
 #define AREA_H
-#pragma once
 
 class Area {
 public:

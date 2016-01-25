@@ -1,8 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
-#pragma once
 
-#include "Vector2f.h"
+#include "mmath.h"
 
 class Window;
 

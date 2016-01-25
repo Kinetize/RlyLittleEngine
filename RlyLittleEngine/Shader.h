@@ -6,10 +6,13 @@
 #include <fstream>
 #include <GL/glew.h>
 
-class Shader {
+class Shader : Resource {
 public:
 	Shader();
 	~Shader();
+
+	bool Init() override;
+	void Delete() override;
 
 	void Compile(const std::string& shaderDir);	
 	void Link();

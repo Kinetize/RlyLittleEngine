@@ -1,12 +1,12 @@
 #ifndef WINDOW_H
 #define WINDOW_H
-#pragma once
 
 #include <SDL/SDL.h>
 #include <GL\glew.h>
 #include <DevIL/il.h>
 #include <string>
 #include "Input.h"
+#include "ErrorManager.h"
 
 class Window {
 public:

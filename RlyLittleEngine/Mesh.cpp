@@ -1,10 +1,21 @@
 #include "Mesh.h"
 
-Mesh::Mesh() {
+Mesh::Mesh() :
+	Resource()
+{
 }
 
 
 Mesh::~Mesh() {
+}
+
+bool Mesh::Init() {
+	return true;
+}
+
+void Mesh::Delete() {
+	if (_vboID)
+		glDeleteBuffers(1, &_vboID);
 }
 
 void Mesh::Draw() const {
@@ -18,9 +29,4 @@ void Mesh::Draw() const {
 
 	glDisableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void Mesh::Delete() {
-	if(_vboID)
-		glDeleteBuffers(1, &_vboID);
 }

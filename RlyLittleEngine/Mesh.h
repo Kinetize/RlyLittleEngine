@@ -3,16 +3,18 @@
 #pragma once
 
 #include <GL/glew.h>
+#include "Resource.h"
 #include "Vertex.h"
 
-class Mesh {
+class Mesh : Resource {
 public:
 	Mesh();
 	~Mesh();
 
-	void Draw() const;
+	bool Init() override;
+	void Delete() override;
 
-	void Delete();
+	void Draw() const;
 
 	inline GLuint GetID() { return _vboID; }
 	inline GLuint* GetIDPTR() { return &_vboID; }

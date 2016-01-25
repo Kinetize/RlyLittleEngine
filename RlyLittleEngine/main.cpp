@@ -2,7 +2,6 @@
 
 //REMEMBER: Maus oben links 0,0; OpenGl Mitte 0,0
 //...Erstmal alles zum Funktionieren bringen dann mit GameObjects, Tranform-Klassen, DLL etc. umformen
-//Ressource Manager...(Kein Mehrfaches laden, richtiges löschen etc)
 //ERROR HANDLING!!!!
 //Kommentare...
 //Mip Maps, Filter(ffax?) etc
@@ -11,11 +10,12 @@
 //Tranform Uniform
 //Licht
 //Klassen in Dateien zusammenfassen
+//Transparenz
 
 int main(int argc, char** argv){
 
 	Game game("littleEngine");
-	game.start();
-
+	game.Start();
+	
 	return 0;
 }

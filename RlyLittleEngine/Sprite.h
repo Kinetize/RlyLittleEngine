@@ -1,31 +1,29 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-#pragma once
 
 #include <GL/glew.h>
 #include <iostream>
 #include <cstddef>
 #include "ResourceManager.h"
-#include "Vertex.h"
-#include "Vector2f.h"
+#include "mmath.h"
 #include "GameObject.h"
-#include "Texture.h"
 
 class Sprite : public GameObject {
 public:
-	Sprite(Vector2f pos, Vector2f dimensions);
+	Sprite(Vector2f pos, Vector2f dimensions, DEPTH_LEVEL dl);
 	~Sprite();
 
 private:
-	Mesh*		_mesh;
-	Texture*	_texture;
+	resource_key	_mesh;
+	resource_key	_texture;
 	
 	Vector2f	_pos;
 	Vector2f	_dimensions;
+	DEPTH_LEVEL	_dl;
 
 	void Init();
 	void Update(const float delta) override;
-	void Render(const Shader* shader, const Mesh* mesh, const Area area) const override;
+	void Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const override;
 };
 
 #endif

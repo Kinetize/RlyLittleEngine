@@ -1,23 +1,24 @@
 #include "Sprite.h"
 
-Sprite::Sprite(Vector2f pos, Vector2f dimensions) :
+Sprite::Sprite(Vector2f pos, Vector2f dimensions, DEPTH_LEVEL dl) :
 	GameObject(),
-	_mesh(nullptr),
-	_texture(nullptr), //deftextur
+	_mesh(ResourceManager::resource_key_null),
+	_texture(ResourceManager::resource_key_null), //deftextur
 	_pos(pos),
-	_dimensions(dimensions)
+	_dimensions(dimensions),
+	_dl(dl)
 {
 	Init();
 }
 
 Sprite::~Sprite() {
-	ResourceManager::UnuseResource<Mesh>(_mesh);
-	ResourceManager::UnuseResource<Texture>(_texture);
+	ResourceManager::UnuseResource(_mesh);
+	ResourceManager::UnuseResource(_texture);
 }
 
 void Sprite::Init() {	
-	std::string temp = "";
-	_mesh = ResourceManager::UseResource<Mesh>(temp);
+	std::string temp = "bMesh";
+	//_mesh = ResourceManager::UseResource<Mesh>(temp);
 
 	temp = "test.png";
 	_texture = ResourceManager::UseResource<Texture>(temp);
@@ -27,6 +28,10 @@ void Sprite::Update(const float delta) {
 
 }
 
-void Sprite::Render(const Shader* shader, const Mesh* mesh, const Area area) const {//Mesh Klasse...
-	_mesh->Draw();
+void Sprite::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {//Mesh Klasse...
+	if (dl == _dl) {
+		ResourceManager::CallResource(_texture, FunctionCall::F_BIND);
+		ResourceManager::CallResource(mesh, FunctionCall::F_BIND);
+
+	}
 }
