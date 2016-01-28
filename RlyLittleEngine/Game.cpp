@@ -26,6 +26,12 @@ void Game::Start() {
 	std::string msg = "Everything was loaded, Game will run";
 	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
+	Matrix<int, 2> a();
+	Matrix<int, 2> b();
+	Matrix<int, 2> c();
+
+	c = a * b;
+
 	Run();
 }
 

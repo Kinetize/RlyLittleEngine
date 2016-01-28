@@ -141,8 +141,8 @@ public:
 		return !operator==(other);
 	}
 
-	inline T operator [] (unsigned int index) const { return _values[index]; }
-	inline T& operator [] (unsigned int index) { return _values[index]; }
+	inline T operator [] (const unsigned int index) const { return _values[index]; }
+	inline T& operator [] (const unsigned int index) { return _values[index]; }
 
 protected:
 	T	_values[L];
@@ -234,11 +234,28 @@ public:
 	Matrix<T, L> MakeScale(const Vector<T, L>& other);
 
 	inline void SetValue(const unsigned int i, const unsigned int j, const T value) { _values[i][j] = value; }
+	inline T GetValue(const unsigned int i, const unsigned int j) { return _values[i][j]; }
 
 	T Det() const;
 	Matrix<T, L - 1> SizedDown(const unsigned int i, const unsigned int j) const;
 	Matrix<T, L> Transposed() const;
 	Matrix<T, L> Inversed() const; //TODO
+
+	inline Matrix <T, L> operator*(const Matrix<T, L> other) const {
+		Matrix<T, L> result;
+
+		for (int i = 0; i < L; i++)
+			for (int j = 0; j < L; j++) {
+				//result.SetValue(i, j, T(0));
+				result[i][j] = T(0);
+				for (int k = 0; k < L; k++)
+					result[i][j] += _values[i][k] * other[k][j];
+					//result.SetValue(i, j, result.GetValue(i, j) + _values[i][k] * other.GetValue(k, j));
+			}
+	}
+
+	inline T operator [] (const unsigned int index) const { return _values[index]; }
+	inline T& operator [] (const unsigned int index) { return _values[index]; }
 
 protected:
 	T _values[L][L];

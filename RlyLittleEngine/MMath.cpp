@@ -98,7 +98,7 @@ T Matrix<T, L>::Det() const {
 	else
 		for (int k = 1; k <= L; k++) {
 			if (_values[1][k - 1] != 0)
-				result += pow(-1, 1 + k) * SizedDown(1, k).Det();
+				result += ((1 + k) % 2) == 0 ? SizedDown(1, k).Det() : -SizedDown(1, k).Det();
 		}
 
 	return result;
