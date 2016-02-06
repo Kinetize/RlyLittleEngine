@@ -32,6 +32,5 @@ void Sprite::Render(const resource_key shader, const resource_key mesh, const DE
 	if (dl == _dl) {
 		ResourceManager::CallResource(_texture, FunctionCall::F_BIND);
 		ResourceManager::CallResource(mesh, FunctionCall::F_BIND);
-
 	}
 }

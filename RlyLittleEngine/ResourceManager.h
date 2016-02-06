@@ -16,16 +16,24 @@ typedef unsigned long resource_key;
 
 //SHADER ATTRIBCOUNT
 
-class ResourceLoader 
-{
+class ShaderUtil {
+public:
+	GLuint Init(const std::string& fileDir);
+
+private:
+	void Compile(const std::string& fileDir, GLuint& id);
+	void Link(const GLuint& id, const GLuint& vId, const GLuint& fId);
+	void AddAttribute(GLuint& id, int& attribCount, const std::string& attribName);
+	void AddUniform(GLuint &id, const std::string& name);
+
+	GLuint _id;
+};
+
+class ResourceLoader { //Net so das "ware"
 public:
 	template<class T> static GLuint LoadResource(const std::string& fileDir);
 
 private://Not to happy...
-	static void CompileShader(const std::string& fileDir, GLuint& id);
-	static void AddAttributeToShader(GLuint& id, int& attribCount, const std::string& attribName);
-	static void LinkShader(const GLuint& id, const GLuint& vId, const GLuint& fId);
-
 	static void LoadPNGTexture(const std::string& fileDir, unsigned long& width, 
 		unsigned long& height, std::vector<unsigned char>& data);//.../res/textures mit rein nehmen; def Texture
 };

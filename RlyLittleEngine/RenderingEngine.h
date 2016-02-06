@@ -4,6 +4,7 @@
 #include "Resource.h"
 #include "GameObject.h"
 #include "Window.h"
+#include "Transform.h"
 #include "ResourceManager.h"
 
 class RenderingEngine
@@ -15,6 +16,9 @@ public:
 	void Init(GameObject* root);
 	void ShutDown();
 	void Render() const;
+
+	//TEMP
+	//void SetTranformation(Transform trans) {}
 
 private:
 	bool						_init;

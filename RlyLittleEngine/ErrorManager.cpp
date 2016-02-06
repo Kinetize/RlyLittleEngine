@@ -7,10 +7,8 @@ std::string ErrorManager::logPath;
 Game* ErrorManager::game = nullptr;
 
 void ErrorManager::Init(Game* game) {//Temp
-	if (init) {
-		std::string inf = "ErrorManager tried to be initialized twize";
-		SendInformation(InformationType::IT_ERROR, inf);
-	}
+	if (init)
+		SendInformation(InformationType::IT_ERROR, std::string("ErrorManager tried to be initialized twize"));
 	
 	game = game;
 	logPath = "../Log.html";
@@ -18,20 +16,16 @@ void ErrorManager::Init(Game* game) {//Temp
 	ResourceManager::WriteFile(logPath, msg, true);
 
 	init = true;
-	std::string inf = "ErrorManager initialized";
-	ErrorManager::SendInformation(InformationType::IT_INFO, inf);
+	ErrorManager::SendInformation(InformationType::IT_INFO, std::string("ErrorManager initialized"));
 }
 
 void ErrorManager::ShutDown() {
 	if (init) {
-		std::string inf = "ErrorManager shut down";
-		SendInformation(InformationType::IT_INFO, inf);
+		SendInformation(InformationType::IT_INFO, std::string("ErrorManager shut down"));
 		init = false;
 	}
-	else {
-		std::string inf = "ErrorManager tried to be shut down while not being initialized";
-		SendInformation(InformationType::IT_ERROR, inf);
-	}
+	else
+		SendInformation(InformationType::IT_ERROR, std::string("ErrorManager tried to be shut down while not being initialized"));
 }
 
 void ErrorManager::SendInformation(InformationType type, std::string& text) {

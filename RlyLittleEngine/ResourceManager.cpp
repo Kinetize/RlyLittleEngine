@@ -13,6 +13,73 @@ std::unordered_map<resource_key, ResourceTupel> ResourceManager::resources = std
 std::vector<std::string> ResourceManager::openFiles = std::vector<std::string>();
 resource_key ResourceManager::nextKey = -1;
 
+GLuint ShaderUtil::Init(const std::string& fileDir) {
+
+}
+
+void ShaderUtil::Compile(const std::string& fileDir, GLuint& id) {
+	std::string content = ResourceManager::ReadFile(fileDir);
+	const char* contentPtr = content.c_str(); //Dirty...
+	glShaderSource(id, 1, &contentPtr, nullptr);
+
+	glCompileShader(id);
+
+	GLint sucess = 0;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &sucess);
+
+	if (!sucess) {//Error Log etc
+		GLint logSize = 0;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logSize);
+
+		std::vector<GLchar> errorLog(logSize);
+		glGetShaderInfoLog(id, logSize, &logSize, &errorLog[0]);
+		std::string log(errorLog.begin(), errorLog.end());
+		std::cout << "couldnt compile shader" << std::endl;
+		std::cout << log << std::endl;
+
+		glDeleteShader(id);
+		return;
+	}
+}
+
+void ShaderUtil::Link(const GLuint& id, const GLuint& vId, const GLuint& fId) {
+	glAttachShader(id, vId);
+	glAttachShader(id, fId);
+
+	glLinkProgram(id);
+
+	GLint linked = 0;
+	glGetProgramiv(id, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		glDeleteProgram(id);
+		glDeleteShader(vId);
+		glDeleteShader(fId);
+		std::cout << "couldnt link shader" << std::endl;
+		return;
+	}
+
+	glDetachShader(id, vId);
+	glDetachShader(id, fId);
+	glDeleteShader(vId);
+	glDeleteShader(fId);
+}
+
+void ShaderUtil::AddAttribute(GLuint& id, int& attribCount, const std::string& attribName) {
+	if (!id)
+		return;
+
+	glBindAttribLocation(id, attribCount++, attribName.c_str());
+}
+
+void ShaderUtil::AddUniform(GLuint &id, const std::string& name) {
+	GLuint uniformLocation = glGetUniformLocation(id, name.c_str());
+
+	if (!uniformLocation) {
+		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Failed to find uniform: " + name));
+	}
+}
+
 template<>
 GLuint ResourceLoader::LoadResource<Shader>(const std::string& fileDir) {
 	GLuint id, vId, fId;
@@ -34,6 +101,7 @@ GLuint ResourceLoader::LoadResource<Shader>(const std::string& fileDir) {
 	AddAttributeToShader(id, attribCount, "texCoord");
 
 	LinkShader(id, vId, fId);
+	AddUniformToShader(id, "tranfsorm");
 
 	return id;
 }
@@ -105,61 +173,6 @@ GLuint ResourceLoader::LoadResource<Texture>(const std::string& fileDir) {
 	return id;
 }
 
-void ResourceLoader::CompileShader(const std::string& fileDir, GLuint& id) {
-	std::string content = ResourceManager::ReadFile(fileDir);
-	const char* contentPtr = content.c_str(); //Dirty...
-	glShaderSource(id, 1, &contentPtr, nullptr);
-
-	glCompileShader(id);
-
-	GLint sucess = 0;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &sucess);
-
-	if (!sucess) {//Error Log etc
-		GLint logSize = 0;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logSize);
-
-		std::vector<GLchar> errorLog(logSize);
-		glGetShaderInfoLog(id, logSize, &logSize, &errorLog[0]);
-		std::string log(errorLog.begin(), errorLog.end());
-		std::cout << "couldnt compile shader" << std::endl;
-		std::cout << log << std::endl;
-
-		glDeleteShader(id);
-		return;
-	}
-}
-
-void ResourceLoader::AddAttributeToShader(GLuint& id, int& attribCount, const std::string& attribName) {
-	if (!id)
-		return;
-
-	glBindAttribLocation(id, attribCount++, attribName.c_str());
-}
-
-void ResourceLoader::LinkShader(const GLuint& id, const GLuint& vId, const GLuint& fId) {
-	glAttachShader(id, vId);
-	glAttachShader(id, fId);
-
-	glLinkProgram(id);
-
-	GLint linked = 0;
-	glGetProgramiv(id, GL_LINK_STATUS, &linked);
-
-	if (!linked) {
-		glDeleteProgram(id);
-		glDeleteShader(vId);
-		glDeleteShader(fId);
-		std::cout << "couldnt link shader" << std::endl;
-		return;
-	}
-
-	glDetachShader(id, vId);
-	glDetachShader(id, fId);
-	glDeleteShader(vId);
-	glDeleteShader(fId);
-}
-
 void ResourceLoader::LoadPNGTexture(const std::string& fileDir, unsigned long& width,
 	unsigned long& height, std::vector<unsigned char>& data) { //nicht zufrieden mit Aufteilung
 	std::vector<unsigned char> inData;
@@ -175,25 +188,19 @@ void ResourceLoader::LoadPNGTexture(const std::string& fileDir, unsigned long& w
 void ResourceManager::Init() {
 	if (!live) {
 		live = true;
-		std::string inf = "ResourceManager initialized";
-		ErrorManager::SendInformation(InformationType::IT_INFO, inf);
+		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("ResourceManager initialized"));
 	}
-	else {
-		std::string inf = "ResourceManager tried to be initialized twice";
-		ErrorManager::SendInformation(InformationType::IT_INFO, inf);
-	}
+	else 
+		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("ResourceManager tried to be initialized twice"));
 }
 
 void ResourceManager::ShutDown() {
 	if (live) {
 		live = false; //Delete all pointers etc
-		std::string inf = "ResourceManager was shut down";
-		ErrorManager::SendInformation(InformationType::IT_INFO, inf);
+		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("ResourceManager was shut down"));
 	}
-	else {
-		std::string inf = "ResourceManager tried to be shut down while it was not initialized";
-		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
-	}
+	else
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string("ResourceManager tried to be shut down while it was not initialized"));
 
 }
 
@@ -269,10 +276,9 @@ bool ResourceManager::WriteFile(const std::string& fileDir, const std::string& t
 
 template<class T>
 resource_key ResourceManager::UseResource(const std::string& fileDir) {
-	if (!live) {
-		std::string inf = "ResourceManager called while not being initialized (UseResource: " + fileDir + ")";
-		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
-	}
+	if (!live)
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string(
+			"ResourceManager called while not being initialized (UseResource: " + fileDir + ")"));
 
 	resource_key key = ResInMap(fileDir);
 	
@@ -300,10 +306,9 @@ void ResourceManager::UnuseResource(const resource_key key) {
 }
 
 void ResourceManager::CallResource(const resource_key key, const FunctionCall func) {//Mäh
-	if (!live && func != FunctionCall::F_DELETE) {
-		std::string inf = "ResourceManager called while not being initialized (CallResource Func: " + std::to_string(func) + ")";
-		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
-	}
+	if (!live && func != FunctionCall::F_DELETE)
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string(
+			"ResourceManager called while not being initialized (CallResource Func: " + std::to_string(func) + ")"));
 
 	if (ResInMap(key)) {
 		switch (func) {

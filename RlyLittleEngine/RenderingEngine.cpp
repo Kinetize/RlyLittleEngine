@@ -21,10 +21,8 @@ RenderingEngine::~RenderingEngine() {
 }
 
 void RenderingEngine::Init(GameObject* root) {
-	if (_init) {
-		std::string inf = "RenderingEngine tried to be initialized twize";
-		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
-	}
+	if (_init)
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string("RenderingEngine tried to be initialized twize"));
 	
 	_init = true;
 	_root = root;
@@ -53,27 +51,21 @@ void RenderingEngine::Init(GameObject* root) {
 	dir = "baseMesh";
 	_baseMesh = ResourceManager::UseResource<Mesh>(dir);
 
-	std::string inf = "RenderingEngine initialized";
-	ErrorManager::SendInformation(InformationType::IT_INFO, inf);
+	ErrorManager::SendInformation(InformationType::IT_INFO, std::string("RenderingEngine initialized"));
 }
 
 void RenderingEngine::ShutDown() {
-	if (!_init) {
-		std::string inf = "RenderingEngine tried to be shut down twice";
-		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
-	}
+	if (!_init)
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string("RenderingEngine tried to be shut down twice"));
 	else {
 		_init = false;
-		std::string inf = "RenderingEngine was shut down";
-		ErrorManager::SendInformation(InformationType::IT_INFO, inf);
+		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("RenderingEngine was shut down"));
 	}
 }
 
 void RenderingEngine::Render() const {
-	if (!_init) {
-		std::string inf = "RenderingEngine called to render while not being initialized";
-		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
-	}
+	if (!_init)
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string("RenderingEngine called to render while not being initialized"));
 
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

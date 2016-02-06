@@ -16,19 +16,14 @@ Window::Window(int width, int height, const std::string& title) :
 	_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 	_glContext = SDL_GL_CreateContext(_window);
 
-	if (!_window) {
-		std::string inf = "Window could not be created";
-		ErrorManager::SendInformation(InformationType::IT_FATALERROR, inf);
-	}
+	if (!_window)
+		ErrorManager::SendInformation(InformationType::IT_FATALERROR, std::string("Window could not be created"));
 
 	//glewExperimental = GL_TRUE;
 
 	GLenum res = glewInit();
 	if (res != GLEW_OK)
-	{
-		std::string inf = "OpenGL could not be initialized";
-		ErrorManager::SendInformation(InformationType::IT_FATALERROR, inf);
-	}	
+		ErrorManager::SendInformation(InformationType::IT_FATALERROR, std::string("OpenGL could not be initialized"));
 }
 
 Window::~Window() {

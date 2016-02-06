@@ -207,7 +207,7 @@ class Vector4 : public Vector<T, 4> {
 public:
 	Vector4<T>() : Vector() {}
 	Vector4<T>(const T x, const T y, const T z, const T w) : Vector() { Set(x, y, z, w); }
-	Vector4<T>(const Vector3<T>& other) : Vector() { Set(other.GetX(), other.GetY(), other.GetZ(), 0); }
+	Vector4<T>(const Vector3<T>& other, const T w = 0) : Vector() { Set(other.GetX(), other.GetY(), other.GetZ(), w); }
 	Vector4<T>(const Vector4<T>& other) : Vector() { Set(other.GetX(), other.GetY(), other.GetZ(), other.GetW()); }
 
 	inline T GetX() const { return (*this)[0]; }
