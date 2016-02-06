@@ -56,12 +56,12 @@ public:
 	static const resource_key resource_key_null;
 
 private:
-	static bool												_live;
+	static bool												live;
 
-	static std::unordered_map<resource_key, ResourceTupel>	_resources;
-	static std::vector<std::string>							_openFiles; //ToDo... aber: sinnvoll? Schlieﬂlich keine Threads, aber wenn kein close...
+	static std::unordered_map<resource_key, ResourceTupel>	resources;
+	static std::vector<std::string>							openFiles; //ToDo... aber: sinnvoll? Schlieﬂlich keine Threads, aber wenn kein close...
 
-	static resource_key										_nextkey;
+	static resource_key										nextKey;
 
 	static resource_key ResInMap(const std::string& text);
 	static bool ResInMap(const resource_key key);

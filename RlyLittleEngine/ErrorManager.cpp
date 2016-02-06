@@ -2,30 +2,31 @@
 #include "ResourceManager.h"
 #include "Game.h"
 
-bool ErrorManager::_init = false;
-Game* ErrorManager::_game = nullptr;
+bool ErrorManager::init = false;
+std::string ErrorManager::logPath;
+Game* ErrorManager::game = nullptr;
 
 void ErrorManager::Init(Game* game) {//Temp
-	if (_init) {
+	if (init) {
 		std::string inf = "ErrorManager tried to be initialized twize";
 		SendInformation(InformationType::IT_ERROR, inf);
 	}
 	
-	_game = game;
-	std::string dir = "C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/Log.html";
+	game = game;
+	logPath = "../Log.html";
 	std::string msg = "";
-	ResourceManager::WriteFile(dir, msg, true);
+	ResourceManager::WriteFile(logPath, msg, true);
 
-	_init = true;
+	init = true;
 	std::string inf = "ErrorManager initialized";
 	ErrorManager::SendInformation(InformationType::IT_INFO, inf);
 }
 
 void ErrorManager::ShutDown() {
-	if (_init) {
+	if (init) {
 		std::string inf = "ErrorManager shut down";
 		SendInformation(InformationType::IT_INFO, inf);
-		_init = false;
+		init = false;
 	}
 	else {
 		std::string inf = "ErrorManager tried to be shut down while not being initialized";
@@ -34,23 +35,22 @@ void ErrorManager::ShutDown() {
 }
 
 void ErrorManager::SendInformation(InformationType type, std::string& text) {
-	if (!_init)
+	if (!init)
 		return;
 
 	WriteToLog(type, text);
 
 	if (type == InformationType::IT_FATALERROR) {
-		_game->Stop(InformationType::IT_FATALERROR);
+		game->Stop(InformationType::IT_FATALERROR);
 	}
 }
 
 void ErrorManager::WriteToLog(InformationType type, std::string& text) {
-	if (!_init) {
+	if (!init) {
 		std::cout << "Tried to write to log while not being initilized. Msg: " + text << std::endl;
 		return;
 	}
 
-	std::string dir = "C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/Log.html"; //relativ paths
 	std::string fText = "";
 
 	switch (type)
@@ -68,5 +68,5 @@ void ErrorManager::WriteToLog(InformationType type, std::string& text) {
 		break;
 	};
 
-	ResourceManager::WriteFile(dir, fText);
+	ResourceManager::WriteFile(logPath, fText);
 }

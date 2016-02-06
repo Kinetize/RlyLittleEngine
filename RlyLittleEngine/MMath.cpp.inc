@@ -1,4 +1,7 @@
-#include "mmath.h"
+#pragma once
+//#include "mmath.h"
+
+//template float Vector<float, 2>::Dot(const Vector<float, 2> other) const;
 
 template <typename T, unsigned int L>
 T Vector<T, L>::Max() const {
@@ -37,7 +40,7 @@ std::string Vector<T, L>::ToString() const {
 	std::string ret = "";
 
 	for (int i = 0; i < L; i++)
-		ret += std::ToString((*this)[i]);
+		ret += std::to_string((*this)[i]) + " ";
 
 	return ret;
 }
@@ -49,6 +52,19 @@ Vector3<T> Vector3<T>::Cross(const Vector3<T>& other) const {
 	T z = GetX() * other.GetY() - GetY() * other.GetX();
 
 	return Vector3<T>(x, y, z);
+}
+
+template <typename T, unsigned int L>
+std::string Matrix<T, L>::ToString() const { 
+	std::string ret = "";
+
+	for (int i = 0; i < L; i++) {
+		for(int j = 0; j < L; j++)
+			ret += std::to_string((*this)[i]) + " ";
+		ret += "\n";
+	}
+
+	return ret;
 }
 
 template <typename T, unsigned int L>
@@ -125,7 +141,7 @@ Matrix<T, L> Matrix<T, L>::Transposed() const {
 	Matrix <T, L> other();
 	for (int i = 0; i < L; i++)
 		for (int j = 0; i < L; j++)
-			other[j][i] = _values[i][j];
+			other.SetValue(j, i, values[i][j]);
 	return other;
 }
 

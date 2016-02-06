@@ -19,9 +19,11 @@ public:
 	static void SendInformation(InformationType type, std::string& text);
 
 private:
-	static bool _init;
+	static bool init;
 
-	static Game* _game;
+	static std::string logPath; //Konstante?
+
+	static Game* game;
 
 	static void WriteToLog(InformationType type, std::string& text);
 };

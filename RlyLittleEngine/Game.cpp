@@ -5,7 +5,7 @@ Game::Game(const std::string title, int width, int height, int fps) :
 	_renderingEngine(RenderingEngine()),
 	_root(GameObject()),
 	_run(false),
-	_timePerFrame(1.0f / (fps - 1)) //weird
+	_timePerFrame(1.0f / fps) //weird fps
 {
 }
 
@@ -26,11 +26,23 @@ void Game::Start() {
 	std::string msg = "Everything was loaded, Game will run";
 	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
 
-	Matrix<int, 2> a();
-	Matrix<int, 2> b();
-	Matrix<int, 2> c();
+	Matrix2i a, b, c;
 
-	c = a * b;
+	a.MakeIdentity();
+	b.MakeIdentity();
+
+	Vector2f x, y;
+
+	x.Dot(y);
+
+	Vector2f d(1, 2);
+	Vector2f e(3, 0);
+	Vector2f f;
+
+	f = d + e;
+	std::cout << f.ToString() << std::endl;
+
+	//c = a * b;
 
 	Run();
 }

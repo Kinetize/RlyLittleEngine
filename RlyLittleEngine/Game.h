@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "Input.h"
+#include "MMath.h"
 #include "Window.h"
 #include "Sprite.h"
 #include "Resource.h"
