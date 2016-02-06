@@ -220,6 +220,13 @@ public:
 	inline void SetZ(T value) { (*this)[2] = value; }
 	inline void SetW(T value) { (*this)[3] = value; }
 
+	inline void Set(float x, float y, float z, float w) {
+		_values[0] = x;
+		_values[1] = y;
+		_values[2] = z;
+		_values[3] = w;
+	}
+
 	inline Vector4<T> operator= (const Vector<T, 4>& other) {
 		for (int i = 0; i < 4; i++)
 			(*this)[i] = other[i];
@@ -256,7 +263,7 @@ public:
 				_values[i][j] = other[i][j];
 	}
 
-	String ToString() const;
+	std::string ToString() const;
 
 	Matrix<T, L> MakeIdentity();
 	Matrix<T, L> MakeTranslation(const Vector<T, L>& other);
@@ -264,6 +271,7 @@ public:
 
 	inline void SetValue(const unsigned int i, const unsigned int j, const T value) { _values[i][j] = value; }
 	inline T GetValue(const unsigned int i, const unsigned int j) { return _values[i][j]; }
+	inline T* GetFirstAsPTR() { return &_values[0][0]; }
 
 	T Det() const;
 	Matrix<T, L - 1> SizedDown(const unsigned int i, const unsigned int j) const;

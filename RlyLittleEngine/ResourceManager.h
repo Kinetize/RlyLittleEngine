@@ -18,15 +18,48 @@ typedef unsigned long resource_key;
 
 class ShaderUtil {
 public:
-	GLuint Init(const std::string& fileDir);
+	ShaderUtil() :
+		_id(0),
+		_attribCount(0),
+		_uniforms(std::unordered_map<std::string, GLuint>())
+	{}
+
+	GLuint Init(const std::string& fileDir, resource_key key); //MÄÄÄÄH - Attributes etc
+	void AddUniform(const std::string& name);
+	inline void SetUniformi(const std::string& name, const int val) { glUniform1i(_uniforms[name],val); } //passt der Zugriff per name...?
+	void SetUniformf(const std::string& name, const float val) { glUniform1f(_uniforms[name], val); }
+	void SetUniformV3f(const std::string& name, const Vector3f& val) { glUniform3f(_uniforms[name], val.GetX(), val.GetY(), val.GetZ()); }
+	//Some Error floating aroung the uniforms/translation
+	void SetUniformM4f(const std::string& name, Matrix4f& val) { //glUseProgram(_id); 
+		GLfloat a[4][4];
+		//a[0][0] = 1;
+		//a[1][1] = 1;
+		//a[2][2] = 1;
+		//a[3][3] = 1;
+
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				if (i != j)
+					a[i][j] = 0;
+				else
+					a[i][j] = 1;
+
+		glUniformMatrix4fv(_uniforms[name], 1, true, &a[0][0]);
+}
+
+	static inline ShaderUtil& GetUtil(const resource_key key) { return utils[key]; }
+	static inline void DeleteUtil(const resource_key key) { utils.erase(key); }
 
 private:
-	void Compile(const std::string& fileDir, GLuint& id);
-	void Link(const GLuint& id, const GLuint& vId, const GLuint& fId);
-	void AddAttribute(GLuint& id, int& attribCount, const std::string& attribName);
-	void AddUniform(GLuint &id, const std::string& name);
+	static std::unordered_map<resource_key, ShaderUtil> utils;
 
 	GLuint _id;
+	unsigned int _attribCount;
+	std::unordered_map<std::string, GLuint> _uniforms;
+
+	void Compile(const std::string& fileDir, GLuint& id);
+	void Link(const GLuint& vId, const GLuint& fId);
+	void AddAttribute(const std::string& attribName);
 };
 
 class ResourceLoader { //Net so das "ware"
@@ -61,6 +94,7 @@ public:
 
 	static void CallResource(const resource_key key, const FunctionCall func);//Mäh
 
+	static const resource_key GetActKey() { return nextKey; }
 	static const resource_key resource_key_null;
 
 private:

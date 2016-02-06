@@ -44,12 +44,14 @@ void RenderingEngine::Init(GameObject* root) {
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-	std::string test = "test.png";
-	_baseTexture = ResourceManager::UseResource<Texture>(test);
-	std::string dir = "baseShader";
-	_shaders.push_back(ResourceManager::UseResource<Shader>(dir));
-	dir = "baseMesh";
-	_baseMesh = ResourceManager::UseResource<Mesh>(dir);
+	_baseTexture = ResourceManager::UseResource<Texture>(std::string("test.png"));
+	_shaders.push_back(ResourceManager::UseResource<Shader>(std::string("baseShader")));
+	_baseMesh = ResourceManager::UseResource<Mesh>(std::string("baseMesh"));
+
+	for (auto& element : _shaders) {
+		ShaderUtil::GetUtil(element).AddUniform("a");
+		ShaderUtil::GetUtil(element).AddUniform("transform");
+	}
 
 	ErrorManager::SendInformation(InformationType::IT_INFO, std::string("RenderingEngine initialized"));
 }

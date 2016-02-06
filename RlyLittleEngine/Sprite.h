@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "mmath.h"
 #include "GameObject.h"
+#include "Transform.h"
 
 class Sprite : public GameObject {
 public:

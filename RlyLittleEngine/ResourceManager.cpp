@@ -1,6 +1,8 @@
 #include "ResourceManager.h" 
 #include <iostream> //temp
 
+std::unordered_map<resource_key, ShaderUtil> ShaderUtil::utils = std::unordered_map<resource_key, ShaderUtil>();
+
 bool ResourceManager::live = false;
 
 template resource_key ResourceManager::UseResource<Shader>(const std::string& fileDir);
@@ -13,8 +15,30 @@ std::unordered_map<resource_key, ResourceTupel> ResourceManager::resources = std
 std::vector<std::string> ResourceManager::openFiles = std::vector<std::string>();
 resource_key ResourceManager::nextKey = -1;
 
-GLuint ShaderUtil::Init(const std::string& fileDir) {
+GLuint ShaderUtil::Init(const std::string& fileDir, resource_key key) {
+	GLuint vId, fId;
 
+	_id = glCreateProgram();
+	vId = glCreateShader(GL_VERTEX_SHADER);
+	fId = glCreateShader(GL_FRAGMENT_SHADER);
+
+	if (!_id | !vId || !fId)
+		return -1;
+
+	//relativ paths... temp
+	std::string dir = "../res/shaders/" + fileDir;
+	Compile(dir + ".vs", vId);
+	Compile(dir + ".fs", fId);
+
+	AddAttribute("pos");
+	AddAttribute("texCoord");
+
+	Link(vId, fId);
+	//AddUniform("transform");
+
+	utils.insert(std::make_pair(key, *this));
+
+	return _id;
 }
 
 void ShaderUtil::Compile(const std::string& fileDir, GLuint& id) {
@@ -42,68 +66,48 @@ void ShaderUtil::Compile(const std::string& fileDir, GLuint& id) {
 	}
 }
 
-void ShaderUtil::Link(const GLuint& id, const GLuint& vId, const GLuint& fId) {
-	glAttachShader(id, vId);
-	glAttachShader(id, fId);
+void ShaderUtil::Link(const GLuint& vId, const GLuint& fId) {
+	glAttachShader(_id, vId);
+	glAttachShader(_id, fId);
 
-	glLinkProgram(id);
+	glLinkProgram(_id);
 
 	GLint linked = 0;
-	glGetProgramiv(id, GL_LINK_STATUS, &linked);
+	glGetProgramiv(_id, GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		glDeleteProgram(id);
+		glDeleteProgram(_id);
 		glDeleteShader(vId);
 		glDeleteShader(fId);
 		std::cout << "couldnt link shader" << std::endl;
 		return;
 	}
 
-	glDetachShader(id, vId);
-	glDetachShader(id, fId);
+	glDetachShader(_id, vId);
+	glDetachShader(_id, fId);
 	glDeleteShader(vId);
 	glDeleteShader(fId);
 }
 
-void ShaderUtil::AddAttribute(GLuint& id, int& attribCount, const std::string& attribName) {
-	if (!id)
+void ShaderUtil::AddAttribute(const std::string& attribName) {
+	if (!_id)
 		return;
 
-	glBindAttribLocation(id, attribCount++, attribName.c_str());
+	glBindAttribLocation(_id, _attribCount++, attribName.c_str());
 }
 
-void ShaderUtil::AddUniform(GLuint &id, const std::string& name) {
-	GLuint uniformLocation = glGetUniformLocation(id, name.c_str());
+void ShaderUtil::AddUniform(const std::string& name) {
+	GLuint uniformId = glGetUniformLocation(_id, name.c_str());
 
-	if (!uniformLocation) {
+	if (!uniformId)
 		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Failed to find uniform: " + name));
-	}
+	
+	_uniforms.insert(std::make_pair(name, uniformId));
 }
 
 template<>
 GLuint ResourceLoader::LoadResource<Shader>(const std::string& fileDir) {
-	GLuint id, vId, fId;
-	int attribCount = 0;
-
-	id = glCreateProgram();
-	vId = glCreateShader(GL_VERTEX_SHADER);
-	fId = glCreateShader(GL_FRAGMENT_SHADER);
-
-	if (!id | !vId || !fId)
-		return -1;
-
-	//relativ paths... temp
-	std::string dir = "../res/shaders/" + fileDir;
-	CompileShader(dir + ".vs", vId);
-	CompileShader(dir + ".fs", fId);
-
-	AddAttributeToShader(id, attribCount, "pos");
-	AddAttributeToShader(id, attribCount, "texCoord");
-
-	LinkShader(id, vId, fId);
-	AddUniformToShader(id, "tranfsorm");
-
-	return id;
+	return ShaderUtil().Init(fileDir, ResourceManager::GetActKey());
 }
 
 template<>
@@ -300,9 +304,11 @@ resource_key ResourceManager::UseResource(const std::string& fileDir) {
 
 void ResourceManager::UnuseResource(const resource_key key) {
 	if (ResInMap(key)) 
-		if (--resources[key].users < 1) 
+		if (--resources[key].users < 1) {
 			CallResource(key, FunctionCall::F_DELETE);
-			//Element löschen, resource ausm Speicher kicken, Vector auffüllen etc
+			ShaderUtil::DeleteUtil(key);
+			//Element löschen, resource ausm Speicher kicken
+		}
 }
 
 void ResourceManager::CallResource(const resource_key key, const FunctionCall func) {//Mäh
