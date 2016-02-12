@@ -1,8 +1,14 @@
 #include "Transform.h"
 
-Matrix4f Transform::GetTransformation() const {
-	Matrix4f trans;
-	trans.MakeTranslation(Vector4f(_translation, 1));
+Matrix4f& Transform::GetTransformation() {
+	if (!_changed)
+		return _transform;
 
-	return trans;
+	Matrix4f trans, rot, scale;
+	trans.MakeTranslation(Vector4f(_translation, 1));
+	rot.MakeRotation(Vector4f(_rotation, 1));
+	scale.MakeScale(Vector4f(_scale, 1));
+
+	_transform = trans * rot * scale;
+	return _transform;
 }

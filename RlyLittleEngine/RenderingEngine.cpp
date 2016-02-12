@@ -49,7 +49,6 @@ void RenderingEngine::Init(GameObject* root) {
 	_baseMesh = ResourceManager::UseResource<Mesh>(std::string("baseMesh"));
 
 	for (auto& element : _shaders) {
-		ShaderUtil::GetUtil(element).AddUniform("a");
 		ShaderUtil::GetUtil(element).AddUniform("transform");
 	}
 

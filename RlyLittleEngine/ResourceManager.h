@@ -5,7 +5,6 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-#include <DevIL/il.h>
 #include "SOIL/SOIL.h"
 #include "Resource.h"
 #include "Util.h"
@@ -30,7 +29,7 @@ public:
 	void SetUniformf(const std::string& name, const float val) { glUniform1f(_uniforms[name], val); }
 	void SetUniformV3f(const std::string& name, const Vector3f& val) { glUniform3f(_uniforms[name], val.GetX(), val.GetY(), val.GetZ()); }
 	//Some Error floating aroung the uniforms/translation
-	void SetUniformM4f(const std::string& name, Matrix4f& val) { //glUseProgram(_id); 
+	void SetUniformM4f(const std::string& name, Matrix4f& val) { val.SetUniform(_uniforms[name]);
 		GLfloat a[4][4];
 		//a[0][0] = 1;
 		//a[1][1] = 1;
@@ -44,8 +43,9 @@ public:
 				else
 					a[i][j] = 1;
 
-		glUniformMatrix4fv(_uniforms[name], 1, true, &a[0][0]);
-}
+		//glUniformMatrix4fv(_uniforms[name], 1, true, &a[0][0]);
+		//Matrix4f().MakeIdentity().SetUniform(_uniforms[name]);
+	}
 
 	static inline ShaderUtil& GetUtil(const resource_key key) { return utils[key]; }
 	static inline void DeleteUtil(const resource_key key) { utils.erase(key); }

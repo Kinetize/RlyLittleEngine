@@ -1,6 +1,9 @@
 #pragma once
+//#ifndef MATH_CPP_INC
+//#define MATH_CPP_INC
 //#include "mmath.h"
-
+//#include "GL/glew.h"
+//#define M_PI = 3.14159265358979323846264338327950288
 //template float Vector<float, 2>::Dot(const Vector<float, 2> other) const;
 
 template <typename T, unsigned int L>
@@ -68,39 +71,41 @@ std::string Matrix<T, L>::ToString() const {
 }
 
 template <typename T, unsigned int L>
-Matrix<T, L> Matrix<T, L>::MakeIdentity() {
+Matrix<T, L>& Matrix<T, L>::MakeIdentity() {
 	for (int i = 0; i < L; i++)
 		for (int j = 0; j < L; j++)
 			if (i == j)
-				_values[i][j] = T(1);
+				(*this)[i][j] = T(1);
 			else
-				_values[i][j] = T(0);
+				(*this)[i][j] = T(0);
 
 	return *this;
 }
 
 template <typename T, unsigned int L>
-Matrix<T, L> Matrix<T, L>::MakeTranslation(const Vector<T, L>& other) {//Richtig?!
+Matrix<T, L>& Matrix<T, L>::MakeTranslation(const Vector<T, L>& other) {//Richtig?!
 	for (int i = 0; i < L; i++)
 		for (int j = 0; j < L; j++)
 			if (j == L - 1)
-				_values[i][j] = other[i];
+				(*this)[i][j] = other[i];
 			else if (i == j)
-				_values[i][j] = T(1);
+				(*this)[i][j] = T(1);
 			else
-				_values[i][j] = T(0);
+				(*this)[i][j] = T(0);
 
 	return *this;
 }
 
+
+
 template <typename T, unsigned int L>
-Matrix<T, L> Matrix<T, L>::MakeScale(const Vector<T, L>& other) {
+Matrix<T, L>& Matrix<T, L>::MakeScale(const Vector<T, L>& other) {
 	for (int i = 0; i < L; i++)
 		for (int j = 0; j < L; j++)
 			if (i == j)
-				_values[i][j] = other[i];
+				(*this)[i][j] = other[i];
 			else
-				_values[i][j] = T(0);
+				(*this)[i][j] = T(0);
 
 	return *this;
 }
@@ -113,7 +118,7 @@ T Matrix<T, L>::Det() const {
 		result = values[1][1];
 	else
 		for (int k = 1; k <= L; k++) {
-			if (_values[1][k - 1] != 0)
+			if ((*this)[1][k - 1] != 0)
 				result += ((1 + k) % 2) == 0 ? SizedDown(1, k).Det() : -SizedDown(1, k).Det();
 		}
 
@@ -127,11 +132,11 @@ Matrix<T, L - 1> Matrix<T, L>::SizedDown(const unsigned int ip, const unsigned i
 	
 	for (int i = 1; i < ip; i++)
 		for (int j = 1; j < jp; j++)
-				result.SetValue(i - 1, j - 1, _values[i - 1][j - 1]);
+				result[i - 1][j - 1] = (*this)[i - 1][j - 1];
 
 	for (int i = ip + 1; i <= L; i++)
 		for (int j = jp + 1; j <= L; j++)
-			result.SetValue(i - 2, j - 2, _values[i - 1][j - 1]);
+			result[i - 2][j - 2] = (*this)[i - 1][j - 1];
 	
 	return result;
 }
@@ -141,7 +146,7 @@ Matrix<T, L> Matrix<T, L>::Transposed() const {
 	Matrix <T, L> other();
 	for (int i = 0; i < L; i++)
 		for (int j = 0; i < L; j++)
-			other.SetValue(j, i, values[i][j]);
+			other[i][j] = *(this)[j][i];
 	return other;
 }
 
@@ -149,3 +154,4 @@ template <typename T, unsigned int L>
 Matrix<T, L> Matrix<T, L>::Inversed() const {
 	return Matrix<T, L>();
 }
+//#endif

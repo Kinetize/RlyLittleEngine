@@ -30,9 +30,10 @@ void Sprite::Update(const float delta) {
 
 void Sprite::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {//Mesh Klasse...
 	if (dl == _dl) {
-		ShaderUtil::GetUtil(shader).SetUniformf("a", 0.5f);
 		Transform temp = Transform();
-		temp.SetTranslation(Vector3f(0, 0, 0));
+		temp.SetTranslation(Vector3f(0.3f, 0.3f, 0));
+		temp.SetRotation(Vector3f(0, 0, 45.0f));
+		temp.SetScale(Vector3f(0.5f, 0.5f, 0.5f));
 		ShaderUtil::GetUtil(shader).SetUniformM4f("transform", temp.GetTransformation()); //Transform über rend.engine oder so?
 		ResourceManager::CallResource(_texture, FunctionCall::F_BIND);
 		ResourceManager::CallResource(mesh, FunctionCall::F_BIND);

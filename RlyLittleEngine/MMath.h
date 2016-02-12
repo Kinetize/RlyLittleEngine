@@ -3,13 +3,16 @@
 
 #include <math.h>
 #include <string>
+#include "GL/glew.h"
 
 typedef unsigned char byte;
 
-#define M_PI = 3.14159265358979323846264338327950288
-#define ToRadians(x) (float) (x * M_PI / 180.f)
-#define ToDegrees(x) (float) (x * 180.0f / M_PI)
-#define Abs(x) (x < 0 ? -x : x)
+#define M_PI 3.14159265358979323846264338327950288
+#define ToRadians(x) ((float) ((x) * M_PI / 180.0f))
+#define ToDegrees(x) ((float) ((x) * 180.0f / M_PI))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define Abs(x) ((x) < 0 ? -(x) : (x))
 
 template<typename T>
 inline T Clamp(const T& min, const T& max, const T& value) {
@@ -25,7 +28,7 @@ class Vector {
 public:
 	Vector<T, L>() { for (int i = 0; i < L; i++) _values[i] = T(0); }
 	Vector<T, L>(const T values[L]) { for (int i = 0; i < L; i++) _values[i] = values[i]; }
-
+	
 	T Max() const;
 	T Min() const;
 	T Dot(const Vector<T, L> other) const;
@@ -259,31 +262,32 @@ public:
 	Matrix<T, L>() { MakeIdentity(); }
 	Matrix<T, L>(const Matrix<T, L>& other) {
 		for (int i = 0; i < L; i++)
-			for (int j = 0; j < 0; j++)
-				_values[i][j] = other[i][j];
+			for (int j = 0; j < L; j++)
+				(*this)[i][j] = other[i][j];
 	}
 
 	std::string ToString() const;
 
-	Matrix<T, L> MakeIdentity();
-	Matrix<T, L> MakeTranslation(const Vector<T, L>& other);
-	Matrix<T, L> MakeScale(const Vector<T, L>& other);
+	Matrix<T, L>& MakeIdentity();
+	Matrix<T, L>& MakeTranslation(const Vector<T, L>& other);
+	Matrix<T, L>& MakeRotation(const Vector4f& other);
+	Matrix<T, L>& MakeScale(const Vector<T, L>& other);
 
-	inline void SetValue(const unsigned int i, const unsigned int j, const T value) { _values[i][j] = value; }
-	inline T GetValue(const unsigned int i, const unsigned int j) { return _values[i][j]; }
-	inline T* GetFirstAsPTR() { return &_values[0][0]; }
-
+	inline void SetValue(const unsigned int i, const unsigned int j, const T value) { (*this)[i][j] = value; }
+	inline T GetValue(const unsigned int i, const unsigned int j) { return (*this)[i][j]; }
+	
 	T Det() const;
 	Matrix<T, L - 1> SizedDown(const unsigned int i, const unsigned int j) const;
 	Matrix<T, L> Transposed() const;
 	Matrix<T, L> Inversed() const; //TODO
+	void SetUniform(unsigned int& id);
 
 	inline Matrix<T, L> operator+(const T& other) const {
 		Matrix<T, L> result;
 
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				result.SetValue(i, j, _values[i][j] + other);
+				result[i][j] = (*this)[i][j] + other;
 
 		return result;
 	}
@@ -293,7 +297,7 @@ public:
 
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				result.SetValue(i, j, _values[i][j] - other);
+				result[i][j] = (*this)[i][j] - other;
 
 		return result;
 	}
@@ -303,7 +307,7 @@ public:
 
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				result.SetValue(i, j, _values[i][j] * other);
+				result[i][j] = (*this)[i][j] * other;
 
 		return result;
 	}
@@ -313,7 +317,7 @@ public:
 
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				result.SetValue(i, j, _values[i][j] / other);
+				result[i][j] = (*this)[i][j] / other;
 
 		return result;
 	}
@@ -321,7 +325,7 @@ public:
 	inline Matrix<T, L> operator+=(const T& other) const {
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				_values[i][j] = (*this)[i][j] + other;
+				(*this)[i][j] += other;
 
 		return *this;
 	}
@@ -329,7 +333,7 @@ public:
 	inline Matrix<T, L> operator-=(const T& other) const {
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				_values[i][j] = (*this)[i][j] - other;
+				(*this)[i][j] -= other;
 
 		return *this;
 	}
@@ -337,7 +341,7 @@ public:
 	inline Matrix<T, L> operator*=(const T& other) const {
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				_values[i][j] = (*this)[i][j] * other;
+				(*this)[i][j] *= other;
 
 		return *this;
 	}
@@ -345,7 +349,7 @@ public:
 	inline Matrix<T, L> operator/=(const T& other) const {
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				_values[i][j] = (*this)[i][j] / other;
+				(*this)[i][j] /= other;
 
 		return *this;
 	}
@@ -355,7 +359,7 @@ public:
 
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				result.SetValue(i, j, _values[i][j] + other[i][j]);
+				result[i][j] = (*this)[i][j] + other[i][j];
 
 		return result;
 	}
@@ -365,7 +369,7 @@ public:
 
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < 0; j++)
-				result.SetValue(i, j, _values[i][j] - other[i][j]);
+				result[i][j] = (*this)[i][j] - other[i][j];
 
 		return result;
 	}
@@ -377,14 +381,16 @@ public:
 			for (int j = 0; j < L; j++) {
 				result[i][j] = T(0);
 				for (int k = 0; k < L; k++)
-					result.SetValue(i, j, _values[i][j] * other[i][j]);
+					result[i][j] += (*this)[i][k] * other[k][j];
 			}
+
+		return result;
 	}
 
 	inline bool operator==(const Matrix<T, L>& other) const {
 		for (int i = 0; i < L; i++)
 			for (int j = 0; j < L; j++)
-				if (_values[i][j] != other[i][j])
+				if ((*this)[i][j] != other[i][j])
 					return false;
 		return true;
 	}
@@ -393,6 +399,7 @@ public:
 		return !operator==(other);
 	}
 
+	inline T* operator [] (const unsigned int index) { return _values[index]; }
 	inline Vector<T, L> operator [] (const unsigned int index) const { Vector<T, L> ret(_values[index]); return ret; }
 	//inline Vector<T, L>& operator [] (const unsigned int index) { Vector<T, L> ret(_values[index]); return ret; }
 
@@ -402,7 +409,7 @@ protected:
 	//  10 11
 };
 
-template<typename T>
+/*template<typename T>
 class Matrix2 : public Matrix<T, 2> {
 public:
 };
@@ -415,16 +422,16 @@ public:
 template<typename T>
 class Matrix4 : public Matrix<T, 4> {
 public:
-};
+};*/
 
-typedef Matrix2<int> Matrix2i;
-typedef Matrix2<float> Matrix2f;
+typedef Matrix<int, 2> Matrix2i;
+typedef Matrix<float, 2> Matrix2f;
 
-typedef Matrix3<int> Matrix3i;
-typedef Matrix3<float> Matrix3f;
+typedef Matrix<int, 3> Matrix3i;
+typedef Matrix<float, 3> Matrix3f;
 
-typedef Matrix4<int> Matrix4i;
-typedef Matrix4<float> Matrix4f;
+typedef Matrix<int, 4> Matrix4i;
+typedef Matrix<float, 4> Matrix4f;
 
 #include "mmath.cpp.inc"
 #endif
