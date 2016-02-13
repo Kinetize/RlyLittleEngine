@@ -3,6 +3,8 @@
 
 #include "MMath.h"
 
+class RenderingEngine;
+
 //Erst 3D für Ebenene, später Zugang über Methoden für 2D
 //IN SHADER ATM NOCH Z = 1!!!!!!
 class Transform { //Noch rotation um ursprung mit -> trns um ursprung, drehen, zurück
@@ -33,7 +35,7 @@ private:
 	Vector3f _rotation;
 	Vector3f _scale;
 
-	bool _changed;
+	bool	 _changed;
 };
 
 #endif

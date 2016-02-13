@@ -269,6 +269,7 @@ public:
 	std::string ToString() const;
 
 	Matrix<T, L>& MakeIdentity();
+	Matrix<T, L>& MakeProjection(const float fov, const float zNear, const float zFar, const float aspectRatio);
 	Matrix<T, L>& MakeTranslation(const Vector<T, L>& other);
 	Matrix<T, L>& MakeRotation(const Vector4f& other);
 	Matrix<T, L>& MakeScale(const Vector<T, L>& other);

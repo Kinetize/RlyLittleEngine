@@ -10,6 +10,7 @@
 #include "Util.h"
 #include "picoPNG.h"
 #include "ErrorManager.h"
+#include "Transform.h"
 
 typedef unsigned long resource_key;
 
@@ -20,32 +21,20 @@ public:
 	ShaderUtil() :
 		_id(0),
 		_attribCount(0),
+		_projection(Matrix4f()),
 		_uniforms(std::unordered_map<std::string, GLuint>())
 	{}
 
 	GLuint Init(const std::string& fileDir, resource_key key); //MÄÄÄÄH - Attributes etc
 	void AddUniform(const std::string& name);
+
 	inline void SetUniformi(const std::string& name, const int val) { glUniform1i(_uniforms[name],val); } //passt der Zugriff per name...?
-	void SetUniformf(const std::string& name, const float val) { glUniform1f(_uniforms[name], val); }
-	void SetUniformV3f(const std::string& name, const Vector3f& val) { glUniform3f(_uniforms[name], val.GetX(), val.GetY(), val.GetZ()); }
-	//Some Error floating aroung the uniforms/translation
-	void SetUniformM4f(const std::string& name, Matrix4f& val) { val.SetUniform(_uniforms[name]);
-		GLfloat a[4][4];
-		//a[0][0] = 1;
-		//a[1][1] = 1;
-		//a[2][2] = 1;
-		//a[3][3] = 1;
-
-		for (int i = 0; i < 4; i++)
-			for (int j = 0; j < 4; j++)
-				if (i != j)
-					a[i][j] = 0;
-				else
-					a[i][j] = 1;
-
-		//glUniformMatrix4fv(_uniforms[name], 1, true, &a[0][0]);
-		//Matrix4f().MakeIdentity().SetUniform(_uniforms[name]);
-	}
+	inline void SetUniformf(const std::string& name, const float val) { glUniform1f(_uniforms[name], val); }
+	inline void SetUniformV3f(const std::string& name, const Vector3f& val) { glUniform3f(_uniforms[name], val.GetX(), val.GetY(), val.GetZ()); }
+	inline void SetUniformM4f(const std::string& name, Matrix4f& val) { val.SetUniform(_uniforms[name]); }
+	
+	inline void SetTransformation(Transform& trans, bool projected = true) { SetUniformM4f("transform", projected? _projection * trans.GetTransformation() : trans.GetTransformation()); }
+	inline void SetProjection(const Matrix4f& projection) { _projection = projection; }
 
 	static inline ShaderUtil& GetUtil(const resource_key key) { return utils[key]; }
 	static inline void DeleteUtil(const resource_key key) { utils.erase(key); }
@@ -55,6 +44,7 @@ private:
 
 	GLuint _id;
 	unsigned int _attribCount;
+	Matrix4f _projection;
 	std::unordered_map<std::string, GLuint> _uniforms;
 
 	void Compile(const std::string& fileDir, GLuint& id);

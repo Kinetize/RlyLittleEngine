@@ -18,6 +18,7 @@ void Game::Start() {
 	ErrorManager::Init(this);
 	ResourceManager::Init();
 	_renderingEngine.Init(&_root);
+	_renderingEngine.CalcProjection(75, 0.1f, 1000.0f, _window.GetAspectRatio());
 	Sprite sprite(Vector2f(-1, -1), Vector2f(2, 2), DEPTH_LEVEL::DL_3);
 	_root.AddChildren(&sprite);
 

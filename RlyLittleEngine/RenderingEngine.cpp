@@ -4,6 +4,7 @@
 RenderingEngine::RenderingEngine() :
 	_init(false),
 	_root(nullptr),
+	_projection(Matrix4f()),
 	_shaders(std::vector<resource_key>()),
 	_baseMesh(ResourceManager::resource_key_null),
 	_baseTexture(ResourceManager::resource_key_null)
@@ -79,6 +80,7 @@ void RenderingEngine::Render() const {
 		//Mesh tempm = Mesh(1);
 		//Texture tempt = Texture(1);
 		ResourceManager::CallResource(element, FunctionCall::F_BIND);
+		ShaderUtil::GetUtil(element).SetProjection(_projection);
 
 		ResourceManager::CallResource(_baseTexture, FunctionCall::F_BIND);
 		_root->RenderAll(element, _baseMesh, DL_3, Area());
@@ -88,4 +90,8 @@ void RenderingEngine::Render() const {
 
 		ResourceManager::CallResource(element, FunctionCall::F_UNBIND);
 	}
+}
+
+void RenderingEngine::CalcProjection(const float fov, const float zNear, const float zFar, const float aspectRatio) {
+	_projection.MakeProjection(fov, zNear, zFar, aspectRatio);
 }

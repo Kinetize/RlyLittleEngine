@@ -1,5 +1,6 @@
 #include "Game.h"
 
+//SHADER ATTRIB COUNT HARDCODED!!!
 //REMEMBER: Maus oben links 0,0; OpenGl Mitte 0,0
 //...Erstmal alles zum Funktionieren bringen dann mit GameObjects, Tranform-Klassen, DLL etc. umformen
 //IMPORTANT:::MMATH TESTEN!!!!

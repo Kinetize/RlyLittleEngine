@@ -17,13 +17,14 @@ public:
 	void ShutDown();
 	void Render() const;
 
-	//TEMP
-	//void SetTranformation(Transform trans) {}
+	void CalcProjection(const float fov, const float zNear, const float zFar, const float aspectRatio);
 
 private:
 	bool						_init;
 	
 	GameObject*					_root;
+
+	Matrix4f					_projection;
 
 	std::vector<resource_key>	_shaders;
 	resource_key				_baseMesh;

@@ -117,23 +117,29 @@ GLuint ResourceLoader::LoadResource<Mesh>(const std::string& fileDir) {
 
 	glGenBuffers(1, &id);
 
-	Vector2f _pos(-1, -1);
+	Vector3f _pos(-1, -1, 1);
 	Vector2f _dimensions(2, 2);
 
 	/*Vertex Struct nur temporär da unschön in momentaner form */Vertex vertexData[6]; //Konstanten...
 	vertexData[0].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[0].pos.SetY(_pos.GetY() + _dimensions.GetY());
+	vertexData[0].pos.SetZ(_pos.GetZ());
 	vertexData[1].pos.SetX(_pos.GetX());
 	vertexData[1].pos.SetY(_pos.GetY() + _dimensions.GetY());
+	vertexData[1].pos.SetZ(_pos.GetZ());
 	vertexData[2].pos.SetX(_pos.GetX());
 	vertexData[2].pos.SetY(_pos.GetY());
+	vertexData[2].pos.SetZ(_pos.GetZ());
 
 	vertexData[3].pos.SetX(_pos.GetX());
 	vertexData[3].pos.SetY(_pos.GetY());
+	vertexData[3].pos.SetZ(_pos.GetZ());
 	vertexData[4].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[4].pos.SetY(_pos.GetY());
+	vertexData[4].pos.SetZ(_pos.GetZ());
 	vertexData[5].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[5].pos.SetY(_pos.GetY() + _dimensions.GetY());
+	vertexData[5].pos.SetZ(_pos.GetZ());
 
 	vertexData[0].texCoord.SetX(1.0f);
 	vertexData[0].texCoord.SetY(1.0f);

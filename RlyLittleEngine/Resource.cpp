@@ -61,7 +61,7 @@ void Shader::Unbind() const {
 	for (int i = 0; i < _attribCount; i++)
 		glDisableVertexAttribArray(i);
 }
-
+/*
 void Shader::SetUniformF(const std::string& uName, float value) {
 	glUniform1f(GetUniformLocation(uName), value);
 }
@@ -76,7 +76,7 @@ GLint Shader::GetUniformLocation(const std::string& uName) {
 
 	return glGetUniformLocation(_id, uName.c_str());
 	//Error Handling...(GL_INVALID_INDEX
-}
+}*/
 
 Mesh::Mesh(GLuint id) :
 	Resource(id)
@@ -98,13 +98,13 @@ void Mesh::Delete() {
 void Mesh::Bind() const {
 	//TEMP
 	glBindBuffer(GL_ARRAY_BUFFER, _id);
-	glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));//Konstanten...
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));//Konstanten...
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));//Konstanten...
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
