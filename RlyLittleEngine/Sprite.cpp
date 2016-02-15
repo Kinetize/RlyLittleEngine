@@ -1,40 +1,26 @@
 #include "Sprite.h"
 
-Sprite::Sprite(Vector2f pos, Vector2f dimensions, DEPTH_LEVEL dl) :
+Sprite::Sprite(Vector2f& pos, Vector2f& dimensions, const std::string& texDir, DEPTH_LEVEL dl) :
 	GameObject(),
-	_mesh(ResourceManager::resource_key_null),
-	_texture(ResourceManager::resource_key_null), //deftextur
-	_pos(pos),
-	_dimensions(dimensions),
+	_texture(ResourceManager::UseResource<Texture>(texDir)), //deftextur
+	_transform(Transform()),
 	_dl(dl)
 {
-	Init();
+	_transform.SetTranslation(Vector3f(pos, dl * 0.000000000000000001f));
+	_transform.SetScale(Vector3f(dimensions, 1));
 }
 
 Sprite::~Sprite() {
-	ResourceManager::UnuseResource(_mesh);
 	ResourceManager::UnuseResource(_texture);
 }
 
-void Sprite::Init() {	
-	std::string temp = "bMesh";
-	//_mesh = ResourceManager::UseResource<Mesh>(temp);
-
-	temp = "test.png";
-	_texture = ResourceManager::UseResource<Texture>(temp);
-}
-
-void Sprite::Update(const float delta) {
-
+void Sprite::Update(const float delta, const Input& input) {
+	_transform.GetTransformation();
 }
 
 void Sprite::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {//Mesh Klasse...
 	if (dl == _dl) {
-		Transform temp = Transform();
-		temp.SetTranslation(Vector3f(0.0f, 0.0f, 0));
-		temp.SetRotation(Vector3f(0, 0, 0.0f));
-		temp.SetScale(Vector3f(0.1f, 0.1f, 1.0f));
-		ShaderUtil::GetUtil(shader).SetTransformation(temp); //Transform über rend.engine oder so?
+		ShaderUtil::GetUtil(shader).SetTransformation(_transform.GetLastTransformation()); //Transform über rend.engine oder so?
 		ResourceManager::CallResource(_texture, FunctionCall::F_BIND);
 		ResourceManager::CallResource(mesh, FunctionCall::F_BIND);
 	}

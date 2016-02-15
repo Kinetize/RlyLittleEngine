@@ -11,19 +11,16 @@
 
 class Sprite : public GameObject {
 public:
-	Sprite(Vector2f pos, Vector2f dimensions, DEPTH_LEVEL dl);
+	Sprite(Vector2f& pos, Vector2f& dimensions, const std::string& texDir = "test.png", DEPTH_LEVEL dl = DEPTH_LEVEL::DL_2);
 	~Sprite();
 
 private:
-	resource_key	_mesh;
 	resource_key	_texture;
 	
-	Vector2f	_pos;
-	Vector2f	_dimensions;
-	DEPTH_LEVEL	_dl;
+	Transform		_transform;
+	DEPTH_LEVEL		_dl;
 
-	void Init();
-	void Update(const float delta) override;
+	void Update(const float delta, const Input& input) override;
 	void Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const override;
 };
 

@@ -33,7 +33,7 @@ public:
 	inline void SetUniformV3f(const std::string& name, const Vector3f& val) { glUniform3f(_uniforms[name], val.GetX(), val.GetY(), val.GetZ()); }
 	inline void SetUniformM4f(const std::string& name, Matrix4f& val) { val.SetUniform(_uniforms[name]); }
 	
-	inline void SetTransformation(Transform& trans, bool projected = true) { SetUniformM4f("transform", projected? _projection * trans.GetTransformation() : trans.GetTransformation()); }
+	inline void SetTransformation(Matrix4f& trans, bool projected = true) { SetUniformM4f("transform", projected? _projection * trans : trans); }
 	inline void SetProjection(const Matrix4f& projection) { _projection = projection; }
 
 	static inline ShaderUtil& GetUtil(const resource_key key) { return utils[key]; }

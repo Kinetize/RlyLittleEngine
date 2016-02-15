@@ -1,10 +1,18 @@
 #include "RenderingEngine.h"
 
+void Camera::Update(const float delta, const Input& input) {
+	float x = input.GetKey(Input::KEY_RIGHT) ? -_speed * delta : (input.GetKey(Input::KEY_LEFT) ? _speed * delta : 0);
+	float y = input.GetKey(Input::KEY_UP) ? -_speed * delta : (input.GetKey(Input::KEY_DOWN) ? _speed * delta : 0);
+	Move(Vector2f(x, y));
+
+	_rendEngine->SetCamTranslation(Matrix4f().MakeTranslation(Vector4f(_pos, 0, 1)));
+}
 
 RenderingEngine::RenderingEngine() :
 	_init(false),
 	_root(nullptr),
 	_projection(Matrix4f()),
+	_camTrans(Matrix4f()),
 	_shaders(std::vector<resource_key>()),
 	_baseMesh(ResourceManager::resource_key_null),
 	_baseTexture(ResourceManager::resource_key_null)
@@ -43,7 +51,7 @@ void RenderingEngine::Init(GameObject* root) {
 
 	SDL_GL_SetSwapInterval(1);
 
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	_baseTexture = ResourceManager::UseResource<Texture>(std::string("test.png"));
 	_shaders.push_back(ResourceManager::UseResource<Shader>(std::string("baseShader")));
@@ -52,6 +60,8 @@ void RenderingEngine::Init(GameObject* root) {
 	for (auto& element : _shaders) {
 		ShaderUtil::GetUtil(element).AddUniform("transform");
 	}
+
+	//_root->AddChildren(&Camera(*this));
 
 	ErrorManager::SendInformation(InformationType::IT_INFO, std::string("RenderingEngine initialized"));
 }
@@ -80,7 +90,7 @@ void RenderingEngine::Render() const {
 		//Mesh tempm = Mesh(1);
 		//Texture tempt = Texture(1);
 		ResourceManager::CallResource(element, FunctionCall::F_BIND);
-		ShaderUtil::GetUtil(element).SetProjection(_projection);
+		ShaderUtil::GetUtil(element).SetProjection(_projection * _camTrans);
 
 		ResourceManager::CallResource(_baseTexture, FunctionCall::F_BIND);
 		_root->RenderAll(element, _baseMesh, DL_3, Area());
@@ -90,8 +100,4 @@ void RenderingEngine::Render() const {
 
 		ResourceManager::CallResource(element, FunctionCall::F_UNBIND);
 	}
-}
-
-void RenderingEngine::CalcProjection(const float fov, const float zNear, const float zFar, const float aspectRatio) {
-	_projection.MakeProjection(fov, zNear, zFar, aspectRatio);
 }

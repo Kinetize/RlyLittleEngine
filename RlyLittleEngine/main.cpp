@@ -1,5 +1,8 @@
 #include "Game.h"
 
+//GameObject als Pointer oder direkt speichern?!
+//Transform an child etc weitergeben
+//Mesh hardcode..., ein Mesh für alle?
 //SHADER ATTRIB COUNT HARDCODED!!!
 //REMEMBER: Maus oben links 0,0; OpenGl Mitte 0,0
 //...Erstmal alles zum Funktionieren bringen dann mit GameObjects, Tranform-Klassen, DLL etc. umformen

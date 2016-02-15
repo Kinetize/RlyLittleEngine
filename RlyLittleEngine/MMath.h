@@ -181,7 +181,7 @@ class Vector3 : public Vector<T, 3> {
 public:
 	Vector3<T>() : Vector() {}
 	Vector3<T>(const T x, const T y, const T z) : Vector() { Set(x, y, z); }
-	Vector3<T>(const Vector2<T>& other) : Vector() { Set(other.GetX(), other.GetY(), 0); }
+	Vector3<T>(const Vector2<T>& other, const float z = 0) : Vector() { Set(other.GetX(), other.GetY(), z); }
 	Vector3<T>(const Vector3<T>& other) : Vector() { Set(other.GetX(), other.GetY(), other.GetZ()); }
 
 	Vector3<T> Cross(const Vector3<T>& other) const;
@@ -210,6 +210,7 @@ class Vector4 : public Vector<T, 4> {
 public:
 	Vector4<T>() : Vector() {}
 	Vector4<T>(const T x, const T y, const T z, const T w) : Vector() { Set(x, y, z, w); }
+	Vector4<T>(const Vector2<T>& other, const T z = 0, const T w = 0) : Vector() { Set(other.GetX(), other.GetY(), z, w); }
 	Vector4<T>(const Vector3<T>& other, const T w = 0) : Vector() { Set(other.GetX(), other.GetY(), other.GetZ(), w); }
 	Vector4<T>(const Vector4<T>& other) : Vector() { Set(other.GetX(), other.GetY(), other.GetZ(), other.GetW()); }
 
@@ -257,7 +258,7 @@ typedef Vector4<float> Vector4f;
 typedef Vector4<double> Vector4d;
 
 template<typename T, unsigned int L>
-class Matrix { //mit [][] nur abfrage nicht schreiben!!!
+class Matrix { 
 public:
 	Matrix<T, L>() { MakeIdentity(); }
 	Matrix<T, L>(const Matrix<T, L>& other) {

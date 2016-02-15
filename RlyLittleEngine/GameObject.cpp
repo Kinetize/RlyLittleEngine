@@ -7,15 +7,15 @@ GameObject::GameObject() :
 
 }
 
-void GameObject::UpdateAll(const float delta) {
-	Update(delta);
+void GameObject::UpdateAll(const float delta, const Input& input) {
+	Update(delta, input);
 
 	for (auto & element : children) {
-		element->UpdateAll(delta);
+		element->UpdateAll(delta, input);
 	}
 
 	for (auto & element : components) {
-		element->Update(delta);
+		element->Update(delta, input);
 	}
 }
 
@@ -47,7 +47,7 @@ void GameObject::AddComponent(GameComponent* component) {
 	components.push_back(component);
 }
 
-void GameObject::Update(const float delta) {
+void GameObject::Update(const float delta, const Input& input) {
 
 }
 
@@ -59,7 +59,7 @@ GameComponent::GameComponent()
 {
 }
 
-void GameComponent::Update(float delta) {
+void GameComponent::Update(float delta, const Input& input) {
 
 }
 

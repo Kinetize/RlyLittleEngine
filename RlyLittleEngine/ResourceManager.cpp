@@ -117,7 +117,8 @@ GLuint ResourceLoader::LoadResource<Mesh>(const std::string& fileDir) {
 
 	glGenBuffers(1, &id);
 
-	Vector3f _pos(-1, -1, 1);
+	Vector3f _pos(-1, -1, 1.29999f);
+	//Vector3f _pos(-1, -1, 2.0f);
 	Vector2f _dimensions(2, 2);
 
 	/*Vertex Struct nur temporär da unschön in momentaner form */Vertex vertexData[6]; //Konstanten...
@@ -142,18 +143,18 @@ GLuint ResourceLoader::LoadResource<Mesh>(const std::string& fileDir) {
 	vertexData[5].pos.SetZ(_pos.GetZ());
 
 	vertexData[0].texCoord.SetX(1.0f);
-	vertexData[0].texCoord.SetY(1.0f);
+	vertexData[0].texCoord.SetY(0.0f);
 	vertexData[1].texCoord.SetX(0.0f);
-	vertexData[1].texCoord.SetY(1.0f);
+	vertexData[1].texCoord.SetY(0.0f);
 	vertexData[2].texCoord.SetX(0.0f);
-	vertexData[2].texCoord.SetY(0.0f);
+	vertexData[2].texCoord.SetY(1.0f);
 
 	vertexData[3].texCoord.SetX(0.0f);
-	vertexData[3].texCoord.SetY(0.0f);
+	vertexData[3].texCoord.SetY(1.0f);
 	vertexData[4].texCoord.SetX(1.0f);
-	vertexData[4].texCoord.SetY(0.0f);
+	vertexData[4].texCoord.SetY(1.0f);
 	vertexData[5].texCoord.SetX(1.0f);
-	vertexData[5].texCoord.SetY(1.0f);
+	vertexData[5].texCoord.SetY(0.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW); //Static für den Moment...
@@ -342,6 +343,7 @@ void ResourceManager::CallResource(const resource_key key, const FunctionCall fu
 		}
 	}
 	else
+		//Fehlerbehandlung, wenn key null dann... etc
 		return;
 }
 

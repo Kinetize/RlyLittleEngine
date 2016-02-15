@@ -19,31 +19,17 @@ void Game::Start() {
 	ResourceManager::Init();
 	_renderingEngine.Init(&_root);
 	_renderingEngine.CalcProjection(75, 0.1f, 1000.0f, _window.GetAspectRatio());
-	Sprite sprite(Vector2f(-1, -1), Vector2f(2, 2), DEPTH_LEVEL::DL_3);
+	Sprite sprite(Vector2f(0, 0), Vector2f(2, 1), std::string("back.png"), DEPTH_LEVEL::DL_3);
+	Sprite sprite2(Vector2f(-0.2f, -0.5f), Vector2f(0.25f, 0.1f), std::string("test.png"), DEPTH_LEVEL::DL_2);
+	Camera cam(_renderingEngine); //Eig in Rendering Engine initialisieren, hinnzufügen tec
+	_root.AddChildren(&cam);
 	_root.AddChildren(&sprite);
+	_root.AddChildren(&sprite2);
 
 	_run = true;
 	
 	std::string msg = "Everything was loaded, Game will run";
 	ErrorManager::SendInformation(InformationType::IT_INFO, msg);
-
-	Matrix2i a, b, c;
-
-	a.MakeIdentity();
-	b.MakeIdentity();
-
-	Vector2f x, y;
-
-	x.Dot(y);
-
-	Vector2f d(1, 2);
-	Vector2f e(3, 0);
-	Vector2f f;
-
-	f = d + e;
-	std::cout << f.ToString() << std::endl;
-
-	//c = a * b;
 
 	Run();
 }
@@ -95,7 +81,7 @@ void Game::Run() {
 		
 		while (unprocessedTime > _timePerFrame) {
 			_window.UpdateInputs();
-			_root.UpdateAll(_timePerFrame);
+			_root.UpdateAll(_timePerFrame, _window.GetInput());
 
 			needToRender = true;
 			unprocessedTime -= _timePerFrame;
