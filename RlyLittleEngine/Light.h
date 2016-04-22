@@ -49,7 +49,7 @@ private:
 
 class PointLight : public Light {
 public:
-	PointLight(RenderingEngine* engine = nullptr, Vector3f pos = Vector3f(0, 0, 0), Attenuation attenuation = Attenuation(0, 0), Vector3f color = Vector3f(255, 255, 255), float intensity = 1.0f) :
+	PointLight(Vector3f pos = Vector3f(0, 0, 0), Attenuation attenuation = Attenuation(0, 0), RenderingEngine* engine = nullptr, Vector3f color = Vector3f(255, 255, 255), float intensity = 1.0f) :
 		Light(engine, color, intensity),
 		_pos(Vector3f(pos)),
 		_attenuation(attenuation)
@@ -63,7 +63,7 @@ private:
 
 class DirectionalLight : public PointLight {
 public:
-	DirectionalLight(RenderingEngine* engine = nullptr, Vector2f direction = Vector2f(1, 1), float angle = 1.0f, Vector3f pos = Vector3f(0, 0, 0), Attenuation attenuation = Attenuation(0, 0),
+	DirectionalLight(Vector2f direction = Vector2f(1, 1), float angle = 1.0f, Vector3f pos = Vector3f(0, 0, 0), Attenuation attenuation = Attenuation(0, 0), RenderingEngine* engine = nullptr,
 		Vector3f color = Vector3f(255, 255, 255), float intensity = 1.0f) :
 		PointLight(engine, angle, pos, attenuation, color, intensity),
 		_direction(direction),

@@ -82,7 +82,7 @@ void RenderingEngine::Render() const {
 	
 	//Get all Lights
 
-	for (auto& element : _shaders) {
+	for (auto& element : _shaders) { //Light Uniforms setzen mit tempalte funktionen
 		//Shader temps = Shader(1);
 		//element->Bind();
 		//TODO: Kopierkonstruktoren überall, kovertierung von resourcen, math header, mehr funktionen in vektoren etc

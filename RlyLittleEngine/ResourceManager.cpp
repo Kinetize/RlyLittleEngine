@@ -261,6 +261,32 @@ std::string ResourceManager::ReadFile(const std::string& fileDir) { //Unschöne, 
 	return content;
 }
 
+std::string ResourceManager::ReadFileWithMakros(const std::string& fileDir) { //Unschöne, temporäre Methode, Nur momentan public...
+	/*if (!live) {
+		std::string inf = "ResourceManager called while not being initialized";
+		ErrorManager::SendInformation(InformationType::IT_ERROR, inf);
+	}*/
+
+	std::ifstream file(fileDir);
+
+	if (!file)
+		return "";
+
+	std::string content = "";
+	std::string line;
+
+	while (std::getline(file, line)) {
+		if (content.substr(0, 8) == "#include")
+			content += ReadFileWithMakros(std::string("C:/Users/Nils/Documents/Visual Studio 2015/Projects/RlyLittleEngine/res/shaders/Light.h")) + "\n";//Test
+		else
+			content += line + "\n";
+	}
+
+	file.close();
+
+	return content;
+}
+
 bool ResourceManager::WriteFile(const std::string& fileDir, const std::string& text, bool clearFile) {
 	/*if (!live) {
 		std::string inf = "ResourceManager called while not being initialized";
