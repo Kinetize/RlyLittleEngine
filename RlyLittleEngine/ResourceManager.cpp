@@ -58,7 +58,7 @@ void ShaderUtil::Compile(const std::string& fileDir, GLuint& id) {
 		std::vector<GLchar> errorLog(logSize);
 		glGetShaderInfoLog(id, logSize, &logSize, &errorLog[0]);
 		std::string log(errorLog.begin(), errorLog.end());
-		std::cout << "couldnt compile shader" << std::endl;
+		std::cout << "couldnt compile shader: " << fileDir << std::endl;
 		std::cout << log << std::endl;
 
 		glDeleteShader(id);
@@ -99,10 +99,10 @@ void ShaderUtil::AddAttribute(const std::string& attribName) {
 void ShaderUtil::AddUniform(const std::string& name) {
 	GLuint uniformId = glGetUniformLocation(_id, name.c_str());
 
-	if (!uniformId)
-		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Failed to find uniform: " + name));
-	
-	_uniforms.insert(std::make_pair(name, uniformId));
+	if (uniformId == GL_INVALID_VALUE || uniformId == GL_INVALID_OPERATION)
+		ErrorManager::SendInformation(InformationType::IT_ERROR, std::string("Failed to find uniform: " + name + ". Id: " + std::to_string(_id)));
+	else 
+		_uniforms.insert(std::make_pair(name, uniformId));
 }
 
 template<>
@@ -117,44 +117,38 @@ GLuint ResourceLoader::LoadResource<Mesh>(const std::string& fileDir) {
 
 	glGenBuffers(1, &id);
 
-	Vector3f _pos(-1, -1, 1.29999f);
-	//Vector3f _pos(-1, -1, 2.0f);
+	Vector2f _pos(-1, -1);
 	Vector2f _dimensions(2, 2);
 
+	//TEMP
 	/*Vertex Struct nur temporär da unschön in momentaner form */Vertex vertexData[6]; //Konstanten...
 	vertexData[0].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[0].pos.SetY(_pos.GetY() + _dimensions.GetY());
-	vertexData[0].pos.SetZ(_pos.GetZ());
 	vertexData[1].pos.SetX(_pos.GetX());
 	vertexData[1].pos.SetY(_pos.GetY() + _dimensions.GetY());
-	vertexData[1].pos.SetZ(_pos.GetZ());
 	vertexData[2].pos.SetX(_pos.GetX());
 	vertexData[2].pos.SetY(_pos.GetY());
-	vertexData[2].pos.SetZ(_pos.GetZ());
 
 	vertexData[3].pos.SetX(_pos.GetX());
 	vertexData[3].pos.SetY(_pos.GetY());
-	vertexData[3].pos.SetZ(_pos.GetZ());
 	vertexData[4].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[4].pos.SetY(_pos.GetY());
-	vertexData[4].pos.SetZ(_pos.GetZ());
 	vertexData[5].pos.SetX(_pos.GetX() + _dimensions.GetX());
 	vertexData[5].pos.SetY(_pos.GetY() + _dimensions.GetY());
-	vertexData[5].pos.SetZ(_pos.GetZ());
 
 	vertexData[0].texCoord.SetX(1.0f);
-	vertexData[0].texCoord.SetY(0.0f);
+	vertexData[0].texCoord.SetY(1.0f);
 	vertexData[1].texCoord.SetX(0.0f);
-	vertexData[1].texCoord.SetY(0.0f);
+	vertexData[1].texCoord.SetY(1.0f);
 	vertexData[2].texCoord.SetX(0.0f);
-	vertexData[2].texCoord.SetY(1.0f);
+	vertexData[2].texCoord.SetY(0.0f);
 
 	vertexData[3].texCoord.SetX(0.0f);
-	vertexData[3].texCoord.SetY(1.0f);
+	vertexData[3].texCoord.SetY(0.0f);
 	vertexData[4].texCoord.SetX(1.0f);
-	vertexData[4].texCoord.SetY(1.0f);
+	vertexData[4].texCoord.SetY(0.0f);
 	vertexData[5].texCoord.SetX(1.0f);
-	vertexData[5].texCoord.SetY(0.0f);
+	vertexData[5].texCoord.SetY(1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW); //Static für den Moment...
@@ -207,7 +201,12 @@ void ResourceManager::Init() {
 
 void ResourceManager::ShutDown() {
 	if (live) {
-		live = false; //Delete all pointers etc
+		live = false; 
+		for (auto& element : Util::GetKeysFromMap<resource_key, ResourceTupel>(resources)) 
+			for (int i = resources[element].users; i > 0; i--)
+				UnuseResource(element);
+		
+		nextKey = 0;
 		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("ResourceManager was shut down"));
 	}
 	else
@@ -295,6 +294,8 @@ resource_key ResourceManager::UseResource(const std::string& fileDir) {
 	
 	if (key != resource_key_null) {
 		resources[key].users++;
+		ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Resource: " + fileDir + " (id: " + std::to_string(key) + ") " +
+			"has been added a user. Usercount: " + std::to_string(resources[key].users)));
 		return key;
 	}
 	
@@ -306,6 +307,8 @@ resource_key ResourceManager::UseResource(const std::string& fileDir) {
 	//resources[nextKey].resource = T(ResourceLoader::LoadResource<T>(fileDir));
 	resources[nextKey].resource = std::make_unique<T>(ResourceLoader::LoadResource<T>(fileDir));
 
+	ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Resource: " + fileDir + " (id: " + std::to_string(nextKey) + ") " + "has been loaded."));
+
 	return nextKey;
 }
 
@@ -314,8 +317,12 @@ void ResourceManager::UnuseResource(const resource_key key) {
 		if (--resources[key].users < 1) {
 			CallResource(key, FunctionCall::F_DELETE);
 			ShaderUtil::DeleteUtil(key);
-			//Element löschen, resource ausm Speicher kicken
+			resources.erase(key);
+			ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Resource-id: " + std::to_string(key) + " has been unloaded."));
 		}
+		else
+			ErrorManager::SendInformation(InformationType::IT_INFO, std::string("Resource-id: " + std::to_string(key) + " has been removed a user. " +
+				"UserCount: " + std::to_string(resources[key].users)));
 }
 
 void ResourceManager::CallResource(const resource_key key, const FunctionCall func) {//Mäh
@@ -343,7 +350,6 @@ void ResourceManager::CallResource(const resource_key key, const FunctionCall fu
 		}
 	}
 	else
-		//Fehlerbehandlung, wenn key null dann... etc
 		return;
 }
 

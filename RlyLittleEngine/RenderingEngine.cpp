@@ -1,19 +1,10 @@
 #include "RenderingEngine.h"
 
-void Camera::Update(const float delta, const Input& input) {
-	float x = input.GetKey(Input::KEY_RIGHT) ? -_speed * delta : (input.GetKey(Input::KEY_LEFT) ? _speed * delta : 0);
-	float y = input.GetKey(Input::KEY_UP) ? -_speed * delta : (input.GetKey(Input::KEY_DOWN) ? _speed * delta : 0);
-	Move(Vector2f(x, y));
-
-	_rendEngine->SetCamTranslation(Matrix4f().MakeTranslation(Vector4f(_pos, 0, 1)));
-}
 
 RenderingEngine::RenderingEngine() :
 	_init(false),
 	_root(nullptr),
-	_projection(Matrix4f()),
-	_camTrans(Matrix4f()),
-	_shaders(std::vector<resource_key>()),
+	_shaders(std::unordered_map<resource_key, ShaderType>()),
 	_baseMesh(ResourceManager::resource_key_null),
 	_baseTexture(ResourceManager::resource_key_null)
 {
@@ -23,7 +14,7 @@ RenderingEngine::RenderingEngine() :
 RenderingEngine::~RenderingEngine() {
 	//Löschen...
 	for (auto & element : _shaders)
-		ResourceManager::UnuseResource(element);
+		ResourceManager::UnuseResource(element.first);
 
 	ResourceManager::UnuseResource(_baseMesh);
 	ResourceManager::UnuseResource(_baseTexture);
@@ -51,17 +42,24 @@ void RenderingEngine::Init(GameObject* root) {
 
 	SDL_GL_SetSwapInterval(1);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	_baseTexture = ResourceManager::UseResource<Texture>(std::string("test.png"));
-	_shaders.push_back(ResourceManager::UseResource<Shader>(std::string("baseShader")));
+	//_shaders.insert(std::make_pair(ResourceManager::UseResource<Shader>(std::string("baseShader")), ShaderType::ST_BASE));
+	_shaders.insert(std::make_pair(ResourceManager::UseResource<Shader>(std::string("ambientShader")), ShaderType::ST_AMBIENT));
+	_shaders.insert(std::make_pair(ResourceManager::UseResource<Shader>(std::string("directionalShader")), ShaderType::ST_AMBIENT));
 	_baseMesh = ResourceManager::UseResource<Mesh>(std::string("baseMesh"));
 
-	for (auto& element : _shaders) {
-		ShaderUtil::GetUtil(element).AddUniform("transform");
+	for (auto& element : _shaders) {//MIT STRUCT IN SHADERN ARBEITEN
+		ShaderUtil::GetUtil(element.first).AddUniform("transform");
+		if(element.second == ShaderType::ST_AMBIENT)
+			ShaderUtil::GetUtil(element.first).AddUniform("ambientLight");
+		else if (element.second == ShaderType::ST_POINT) {
+			ShaderUtil::GetUtil(element.first).AddUniform("lightPos");
+			ShaderUtil::GetUtil(element.first).AddUniform("lightStrenght");
+			ShaderUtil::GetUtil(element.first).AddUniform("lightAttributes");
+		}
 	}
-
-	//_root->AddChildren(&Camera(*this));
 
 	ErrorManager::SendInformation(InformationType::IT_INFO, std::string("RenderingEngine initialized"));
 }
@@ -82,6 +80,8 @@ void RenderingEngine::Render() const {
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	//Get all Lights
+
 	for (auto& element : _shaders) {
 		//Shader temps = Shader(1);
 		//element->Bind();
@@ -89,15 +89,16 @@ void RenderingEngine::Render() const {
 		//TEMP
 		//Mesh tempm = Mesh(1);
 		//Texture tempt = Texture(1);
-		ResourceManager::CallResource(element, FunctionCall::F_BIND);
-		ShaderUtil::GetUtil(element).SetProjection(_projection * _camTrans);
+		ResourceManager::CallResource(element.first, FunctionCall::F_BIND);
+		if (element.second == ShaderType::ST_AMBIENT)
+			ShaderUtil::GetUtil(element.first).SetUniformV3f(std::string("ambientLight"), Vector3f(0.2f, 1.0f, 0.5f));
 
 		ResourceManager::CallResource(_baseTexture, FunctionCall::F_BIND);
-		_root->RenderAll(element, _baseMesh, DL_3, Area());
-		_root->RenderAll(element, _baseMesh, DL_2, Area());
-		_root->RenderAll(element, _baseMesh, DL_1, Area());
-		_root->RenderAll(element, _baseMesh, DL_0, Area());
+		_root->RenderAll(element.first, _baseMesh, DL_3, Area());
+		_root->RenderAll(element.first, _baseMesh, DL_2, Area());
+		_root->RenderAll(element.first, _baseMesh, DL_1, Area());
+		_root->RenderAll(element.first, _baseMesh, DL_0, Area());
 
-		ResourceManager::CallResource(element, FunctionCall::F_UNBIND);
+		ResourceManager::CallResource(element.first, FunctionCall::F_UNBIND);
 	}
 }

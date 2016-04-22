@@ -1,9 +1,5 @@
 #include "Game.h"
 
-//GameObject als Pointer oder direkt speichern?!
-//Transform an child etc weitergeben
-//Mesh hardcode..., ein Mesh für alle?
-//SHADER ATTRIB COUNT HARDCODED!!!
 //REMEMBER: Maus oben links 0,0; OpenGl Mitte 0,0
 //...Erstmal alles zum Funktionieren bringen dann mit GameObjects, Tranform-Klassen, DLL etc. umformen
 //IMPORTANT:::MMATH TESTEN!!!!
@@ -12,10 +8,12 @@
 //Mip Maps, Filter(ffax?) etc
 //Indices nötig? schließlich nur 2d, aber schöner...
 //Unöntige Imports, libs(z.b. devil), etc rauswerfen (pico etwas langsam --> ersetzen?)
-//Tranform Uniform
-//Licht
-//Klassen in Dateien zusammenfassen
+//Licht ---> Light Oberklasse, Light Strukturen im Shader
+//Transform durch Object struktur verbinden + objekte "disablen" --> rendern/updaten weder sich noch unterObj
 //Transparenz
+//Transform immer neu erzeugen? oder statt pos, etc?
+//Shader.h/shader.cpp at noch uniform methoden --> clear
+//UNIFORM-METHODDEN template
 
 int main(int argc, char** argv){
 

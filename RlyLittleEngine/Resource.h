@@ -5,9 +5,9 @@
 #include "mmath.h"
 
 struct Vertex {/*Vertex Struct nur temporär da unschön in momentaner form */
-	inline Vertex() : pos(Vector3f(0, 0, 0)), texCoord(Vector2f(0, 0)) {}
+	inline Vertex() : pos(Vector2f(0, 0)), texCoord(Vector2f(0, 0)) {}
 
-	Vector3f	pos;
+	Vector2f	pos;
 	Vector2f	texCoord;
 };
 
@@ -37,6 +37,10 @@ protected:
 	GLuint _id;
 };
 
+enum ShaderType {//remove base?
+	ST_BASE, ST_AMBIENT, ST_POINT
+};
+
 class Shader : public Resource {
 public:
 	Shader(GLuint id);
@@ -47,15 +51,15 @@ public:
 
 	void Bind() const override;
 
-	//void SetUniformF(const std::string& uName, float value);
-	//void SetUniformI(const std::string& uName, int value);
+	void SetUniformF(const std::string& uName, float value);
+	void SetUniformI(const std::string& uName, int value);
 
 	void Unbind() const;
 
 private:
 	int _attribCount;
 
-	//GLint GetUniformLocation(const std::string& uName);
+	GLint GetUniformLocation(const std::string& uName);
 };
 
 class Mesh : public Resource {

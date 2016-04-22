@@ -16,7 +16,7 @@
 
 class Game {
 public:
-	Game(const std::string title, int width = 1024, int height = 768, int fps = 60);
+	Game(const std::string title, int width = 800, int height = 600, int fps = 60);
 	~Game();
 
 	void Start();

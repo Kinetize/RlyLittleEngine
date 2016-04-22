@@ -1,5 +1,18 @@
 #include "GameObject.h"
 
+GameComponent::GameComponent(COMPONENT_TYPE type) :
+	_type(type)
+{
+}
+
+void GameComponent::Update(float delta) {
+
+}
+
+void GameComponent::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {
+
+}
+
 GameObject::GameObject() :
 	children(std::vector<GameObject*>(0)),
 	components(std::vector<GameComponent*>(0))
@@ -7,15 +20,15 @@ GameObject::GameObject() :
 
 }
 
-void GameObject::UpdateAll(const float delta, const Input& input) {
-	Update(delta, input);
+void GameObject::UpdateAll(const float delta) {
+	Update(delta);
 
 	for (auto & element : children) {
-		element->UpdateAll(delta, input);
+		element->UpdateAll(delta);
 	}
 
 	for (auto & element : components) {
-		element->Update(delta, input);
+		element->Update(delta);
 	}
 }
 
@@ -47,22 +60,10 @@ void GameObject::AddComponent(GameComponent* component) {
 	components.push_back(component);
 }
 
-void GameObject::Update(const float delta, const Input& input) {
+void GameObject::Update(const float delta) {
 
 }
 
 void GameObject::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {
-
-}
-
-GameComponent::GameComponent()
-{
-}
-
-void GameComponent::Update(float delta, const Input& input) {
-
-}
-
-void GameComponent::Render(const resource_key shader, const resource_key mesh, const DEPTH_LEVEL dl, const Area area) const {
 
 }

@@ -3,8 +3,6 @@
 
 #include "MMath.h"
 
-class RenderingEngine;
-
 //Erst 3D für Ebenene, später Zugang über Methoden für 2D
 //IN SHADER ATM NOCH Z = 1!!!!!!
 class Transform { //Noch rotation um ursprung mit -> trns um ursprung, drehen, zurück
@@ -17,16 +15,7 @@ public:
 		_changed(true)
 	{}
 
-	Transform(Vector3f& trans, Vector3f& rot, Vector3f& scale) :
-		_transform(Matrix4f()),
-		_translation(Vector3f(trans)),
-		_rotation(Vector3f(rot)),
-		_scale(Vector3f(scale)),
-		_changed(true)
-	{}
-
-	Matrix4f& GetTransformation(); //bzw. calc transformation
-	inline Matrix4f GetLastTransformation() const { return _transform; }
+	Matrix4f& GetTransformation();
 
 	inline Vector3f GetTranslation() const { return _translation; }
 	inline void SetTranslation(const Vector3f& trans) { _changed = true; _translation = Vector3f(trans); }
@@ -44,7 +33,7 @@ private:
 	Vector3f _rotation;
 	Vector3f _scale;
 
-	bool	 _changed;
+	bool _changed;
 };
 
 #endif

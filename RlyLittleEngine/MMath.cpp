@@ -4,27 +4,6 @@
 #include <iostream>
 
 template <typename T, unsigned int L>
-Matrix<T, L>& Matrix<T, L>::MakeProjection(const float fov, const float zNear, const float zFar, const float aspectRatio) {
-	//TODO
-
-	return *this;
-}
-
-template <>
-Matrix4f& Matrix4f::MakeProjection(const float fov, const float zNear, const float zFar, const float aspectRatio) {
-	float tanHFOV = tan(ToRadians(fov / 2));
-	
-	(*this)[0][0] = 1.0f / (tanHFOV * aspectRatio);
-	(*this)[1][1] = 1.0f / tanHFOV;
-	(*this)[2][2] = (-zNear -zFar) / (zNear - zFar);
-	(*this)[2][3] = 2 * zFar * zNear / (zNear - zFar);
-	(*this)[3][2] = 1.0f;
-	(*this)[3][3] = 0.0f;
-
-	return *this;
-}
-
-template <typename T, unsigned int L>
 Matrix<T, L>& Matrix<T, L>::MakeRotation(const Vector4f& other) {//.........
 	return *this;
 }
